@@ -11,18 +11,18 @@ type leaves = Dendogram.leaf list
 
 (* The leaves who come first in the list are the ones belonging to the
    subtrees with the greatest number of leaves. *)
-let rec leavesOfTreeAcc acc = function
+let rec leaves_of_tree_acc acc = function
 	| Leaf(l) -> l::acc
 	| Node(n) ->
-		  if leavesNb n.t1 >= leavesNb n.t2 then
-			  let acc' = leavesOfTreeAcc acc n.t1 in
-			  leavesOfTreeAcc acc' n.t2
+		  if leaves_nb n.t1 >= leaves_nb n.t2 then
+			  let acc' = leaves_of_tree_acc acc n.t1 in
+			  leaves_of_tree_acc acc' n.t2
 		  else
-			  let acc' = leavesOfTreeAcc acc n.t2 in
-			  leavesOfTreeAcc acc' n.t1
+			  let acc' = leaves_of_tree_acc acc n.t2 in
+			  leaves_of_tree_acc acc' n.t1
 
-let leavesOfTree t =
-	List.rev (leavesOfTreeAcc [] t)
+let leaves_of_tree t =
+	List.rev (leaves_of_tree_acc [] t)
 
 (* UNPURE
    Fills the vertical position of each node in the tree.
@@ -30,8 +30,8 @@ let leavesOfTree t =
    The position of a node is the mean of the positions
    of its two subtrees.
 *)
-let rec fillTreePos tree =
-	let leaves = leavesOfTree tree in
+let rec fill_tree_pos tree =
+	let leaves = leaves_of_tree tree in
 
 	(*Fills the positions of the leaves*)
 	List.iteri (fun i leaf -> leaf.index <- i) leaves;
@@ -49,7 +49,7 @@ let rec fillTreePos tree =
 	in ignore(fill_node tree);
 	   leaves
 
-let findMinCoords dynmat =
+let find_min_coords dynmat =
 	let min_i = ref 0 in
 	let min_j = ref 0 in
 	let min_diff = ref infinity in
@@ -70,11 +70,11 @@ let findMinCoords dynmat =
   Builds an upgma tree from a difference matrix
   see the wikipedia article on upgma
 *)
-let mkUpgma init_matrix genotype_size =
+let mk_upgma init_matrix genotype_size =
 
 	let init_size = Array.length init_matrix in
-	let matrix = DynMat.ofMat init_matrix in
-	let nodes = DynArray.init init_size mkLeaf in
+	let matrix = DynMat.of_mat init_matrix in
+	let nodes = DynArray.init init_size mk_leaf in
 	
 	while (DynArray.length nodes) > 1 do
 		let min_a = ref 0 in
@@ -94,7 +94,7 @@ let mkUpgma init_matrix genotype_size =
 		done;
 		(*
 		  Doest not work, don't know why.
-		let (min_a, min_b), min_diff = findMinCoords matrix in
+		let (min_a, min_b), min_diff = find_min_coords matrix in
 		let size = DynArray.length matrix in
 		*)
 		
@@ -102,18 +102,18 @@ let mkUpgma init_matrix genotype_size =
 		let node_a = DynArray.get nodes !min_a in
 		let node_b = DynArray.get nodes !min_b in
 		let homology = homology !min_diff genotype_size in
-		let new_node = mkNode node_a node_b homology in
+		let new_node = mk_node node_a node_b homology in
 		
 		(*1. Generates the new line
 		     (with the differences to the new node)*)
 		let new_line = DynArray.create () in
 		for j=0 to size-1 do
 			if (j <> !min_a) && (j <> !min_b) then (
-				let leaves_a = float_of_int (leavesNb node_a) in
-				let leaves_b = float_of_int (leavesNb node_b) in
+				let leaves_a = float_of_int (leaves_nb node_a) in
+				let leaves_b = float_of_int (leaves_nb node_b) in
 				let sum = leaves_a +. leaves_b in
-				let diff_a = DynMat.getDiff matrix j !min_a in
-				let diff_b = DynMat.getDiff matrix j !min_b in
+				let diff_a = DynMat.get_diff matrix j !min_a in
+				let diff_b = DynMat.get_diff matrix j !min_b in
 				let new_diff = ( diff_a *. leaves_a +. diff_b *. leaves_b ) /. sum in
 				
 				DynArray.add new_line new_diff
@@ -121,8 +121,8 @@ let mkUpgma init_matrix genotype_size =
 		done;
 		
 		(*2. Removes from the matrix the lines and columns corresponding to node_a and node_b*)
-		DynMat.remCol matrix !min_a;
-		DynMat.remCol matrix !min_b;
+		DynMat.rem_col matrix !min_a;
+		DynMat.rem_col matrix !min_b;
 		DynArray.delete matrix !min_a;
 		DynArray.delete matrix !min_b;
 		
@@ -140,19 +140,19 @@ let mkUpgma init_matrix genotype_size =
 	(* Now the only element in the node dynarray is the tree *)
 	let tree = DynArray.get nodes 0 in
 	(*unpure, fills vertical positions of the nodes*)
-	let leaves = fillTreePos tree in
+	let leaves = fill_tree_pos tree in
 	tree, leaves
 
-let rec minHomology = function
+let rec min_homology = function
 	| Leaf(l) -> 100.
 	| Node(n) ->
-		min (minHomology n.t1) (min n.homology (minHomology n.t2))
+		min (min_homology n.t1) (min n.homology (min_homology n.t2))
 
 type transform = float * float -> float * float
 
 type link_info = string array * string
 
-let writeGenos out transform genos leaves links_target =
+let write_genos out transform genos leaves links_target =
     let writeLeaf leaf =
 		let genotype = genos.(leaf.value) in
 		let geno_coords = transform (101., (float_of_int leaf.index)) in
@@ -182,14 +182,14 @@ let header width height =
   Writing the svg
   Big ugly function that need documenting
 *)
-let writeSvgFile genos links_target tree leaves svg_file =
-    let height = int_of_float (50. +. float_of_int(leavesNb tree) *. 25.) in
+let write_svg_file genos links_target tree leaves svg_file =
+    let height = int_of_float (50. +. float_of_int(leaves_nb tree) *. 25.) in
     let width = 1280 in
 	let header = header width height in
 	let svg = IO.output_channel (open_out svg_file) in
 
     
-    let minH = minHomology tree in
+    let minH = min_homology tree in
     
     let trans (x,y) =
 	(*( 9. +. 9. *. x,*)
@@ -220,11 +220,11 @@ let writeSvgFile genos links_target tree leaves svg_file =
 	| Leaf(leaf) ->	()
 	      
 	| Node(node)->
-	      let pos1 = getPos node.t1 in
-	      let pos2 = getPos node.t2 in
+	      let pos1 = get_pos node.t1 in
+	      let pos2 = get_pos node.t2 in
 	      let x = node.homology in
-	      let x1 = getHomology node.t1 in
-	      let x2 = getHomology node.t2 in
+	      let x1 = get_homology node.t1 in
+	      let x2 = get_homology node.t2 in
 	      Svg.put3Lines svg (trans (x1,pos1)) (trans (x, pos1)) (trans (x, pos2)) (trans (x2, pos2));
 	      
 	      write_aux node.t1;
@@ -270,7 +270,7 @@ let writeSvgFile genos links_target tree leaves svg_file =
     Svg.put svg "<g id=\"to_translate\" transform=\"translate(0 0)\">\n";
     
     (*Genotype names*)
-    writeGenos svg transText genos leaves links_target;
+    write_genos svg transText genos leaves links_target;
     
     (*Lines*)
     for i=0 to 20 do

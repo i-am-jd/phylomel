@@ -34,13 +34,13 @@ and t =
 (** [mkLeaf i]
 	@return a new leaf pointing to the genotype of index i
 *)
-val mkLeaf : int -> t
+val mk_leaf : int -> t
 
 (** [mkNode t1 t2 h]
 	@return a new node of subtrees [t1] and [t2],
 	h being the homology between [t1] and [t2]
 *)
-val mkNode : t -> t -> float -> node
+val mk_node : t -> t -> float -> node
 
 (** {4 Accessors} *)
 
@@ -50,15 +50,15 @@ val height : t -> int
 
 (** [leavesNb tree]
 	@return the number of leaves in a tree *)
-val leavesNb : t -> int
+val leaves_nb : t -> int
 
 (** [getPos tree]
 	@return the vertical position of a node *)
-val getPos : t -> float
+val get_pos : t -> float
 
 (** [getHomology tree]
 	@return the homology between the subtrees of a node *)
-val getHomology : t -> float
+val get_homology : t -> float
 
 (**[homology geno_size diff]
    @return
