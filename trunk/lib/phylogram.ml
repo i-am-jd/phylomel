@@ -44,8 +44,8 @@ let height = function
 		  done;
 		  !max_y -. !min_y
 
-let bottomLeftCorner = function
-	| [||] -> invalid_arg "bottomLeftCorner : empty array"
+let bottom_left_corner = function
+	| [||] -> invalid_arg "bottom_left_corner : empty array"
 	| xs ->
 		  let n = Array.length xs in
 		  let minx = ref xs.(0).x in
@@ -61,16 +61,16 @@ let bottomLeftCorner = function
 let dim xs =
 	width xs, height xs
 
-let unsafeReframe (x0,y0) xs =
-	let minx,miny = bottomLeftCorner xs in
+let unsafe_reframe (x0,y0) xs =
+	let minx,miny = bottom_left_corner xs in
 	Array.iter
 		(fun p ->
 			 p.x <- p.x -. minx +. x0;
 			 p.y <- p.y -. miny +. y0)
 		xs
 
-let unsafeCropWidth w' xs =
-	let x0,y0 = bottomLeftCorner xs in
+let unsafe_crop_width w' xs =
+	let x0,y0 = bottom_left_corner xs in
 	let w = width xs in
 	let c = w' /. w in
 	Array.iter
@@ -81,13 +81,13 @@ let unsafeCropWidth w' xs =
 
 (* Creates a tree figure *)
 
-let createFigure points w h tree =
+let create_figure points w h tree =
 	{ ps = points;
 	  w = w;
 	  h = h;
 	  tree = tree }
 
-let radialLayout ?(margin= (10.,10.)) w tree =
+let radial_layout ?(margin= (10.,10.)) w tree =
 	let n = Tree.size tree in
 	let foi = float_of_int in
 
@@ -131,17 +131,17 @@ let radialLayout ?(margin= (10.,10.)) w tree =
 	
 	let x0,y0 = margin in
 
-	(* unsafeReframe margin xs;
-	unsafeCropWidth (w-.2.*.x0) xs;*)
+	(* unsafe_reframe margin xs;
+	unsafe_crop_width (w-.2.*.x0) xs;*)
 	
 	let h = height xs +. 2. *. y0 in
-	createFigure xs w h tree
+	create_figure xs w h tree
 
 
 (*
 let reframe ?(margin=0.,0.) xs =
 	let x0, y0 = margin in
-	let minx,miny = bottomLeftCorner xs in
+	let minx,miny = bottom_left_corner xs in
 	Array.map
 		(fun {x=x;y=y} ->
 			 { x = x -. minx +. x0;
@@ -149,7 +149,7 @@ let reframe ?(margin=0.,0.) xs =
 		xs
 
 let crop_height h' xs =
-	let x0,y0 = bottomLeftCorner xs in
+	let x0,y0 = bottom_left_corner xs in
 	let h = height xs in
 	let c = h' /. h in
 	Array.map
@@ -166,13 +166,13 @@ let crop w' h' xs =
 		crop_height h' xs
 *)
 
-let printPoints ps =
+let print_points ps =
 	Array.iter (fun {x=x; y=y} -> printf "%f,%f " x y) ps;
 	printf "\n"
 
 (*let writeLines fig parents dmat =*)
 
-let putPoints out fig =
+let put_points out fig =
 	let printPoint {x=x; y=y} =
 		Svg.putCircle out
 			~fill:"lightsteelblue"
@@ -181,11 +181,11 @@ let putPoints out fig =
 			3. (x, y) in
 	Array.iter printPoint fig.ps
 
-let putLines out fig =
+let put_lines out fig =
 	let ps = fig.ps in
 	let tree = fig.tree in
 
-	let printLine i m =
+	let print_line i m =
 		if i <> 0 then
 			let p = tree.parents.(i) in
 			let d = DistMat.get tree.dist_mat p i in
@@ -208,9 +208,9 @@ let putLines out fig =
 					( (m.x +. ps.(p).x) /. 2.,
 				      (m.y +. ps.(p).y) /. 2. +. 4.)) in
 
-	Array.iteri printLine ps
+	Array.iteri print_line ps
 
-let writeSvg out fig =
+let write_svg out fig =
 	(*let x0, y0 = margin in
 	let fig = reframe ~margin:margin fig in
 	let fig = crop_width (float_of_int(w) -. 2.*.x0) fig in*)
@@ -219,14 +219,14 @@ let writeSvg out fig =
 	let h = int_of_float fig.h in
 	Svg.put out (Svg.header w h);
 
-	putLines out fig;
-	putPoints out fig;
+	put_lines out fig;
+	put_points out fig;
 
 	Svg.close out
 	
-let writeSvgFile file fig =
+let write_svg_file fig file =
 	let out = IO.output_channel (open_out file) in
-	writeSvg out fig
+	write_svg out fig
 
 
 (*let test =
@@ -235,12 +235,15 @@ let writeSvgFile file fig =
 		ls = [|3;1;1;1|]
 	} in
 	let dmat = [|[||];[|1;|];[|1;1|];[|1;1;1|]|] in
-	radialLayout t dmat*)
+	radial_layout t dmat*)
 
-(*let writeSvgFile (?border = 10) tree dmat file =
-	let xs = radialLayout tree dmat in*)
+(*let write_svg_file (?border = 10) tree dmat file =
+	let xs = radial_layout tree dmat in*)
 	
 (*
+
+  I have to put this in Unit tests.
+
 # fig;;
 - : Phylomel.Vec2.t array = [|{x = 1.; y = 1.}; {x = 4.; y = 2.}|]
 # crop 1. 1. fig;;

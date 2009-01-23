@@ -1,7 +1,8 @@
 type t = {
 	adj_mat : bool DistMat.t;
 	dist_mat : int DistMat.t;
-	children : int list array; (* children.(i) : children list of the ith vertex *)
+	children : int list array;
+	  (* children.(i) : children list of the ith vertex *)
 	parents : int array;
 }
 
@@ -62,7 +63,7 @@ let leaves_nb t =
 
 (* Minimum spanning tree with the prim algorithm
    on a fully connected tree (clique) *)
-let prim_clique_adj_mat (m: int array array) max =
+let prim_complete_adj_mat max (m: int array array) =
 	let n = Array.length m in
 	let tree = DistMat.create n false in
 	let in_tree = Array.create n false in
@@ -110,6 +111,6 @@ let prim_clique_adj_mat (m: int array array) max =
 
 	tree
 
-let prim_clique dist_mat max =
-	let adj_mat = prim_clique_adj_mat dist_mat max in
+let prim_complete max dist_mat =
+	let adj_mat = prim_complete_adj_mat max dist_mat in
 	create adj_mat dist_mat
