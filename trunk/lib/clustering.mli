@@ -14,24 +14,24 @@ type leaves = Dendogram.leaf list
 	@return the leaves of the tree in a list,
 	sorted to make sure that leaves belonging to the same node are
 	contiguous in the tree. *)
-val leavesOfTree : tree -> leaves
+val leaves_of_tree : tree -> leaves
 
 (** [fillTreePos tree]
 	fills the vertical positions of each node in the tree in order
 	to prepare its rendering. More information in the implementation.
 	Beware, this unsafe function modifies the tree in place.
 *)
-val fillTreePos : tree -> leaves
+val fill_tree_pos : tree -> leaves
 
 (** [mkTree distance_matrix genotype_size]
 	@return an unrooted tree built with the UPGMA method,
 	         and the list of the leaves. *)
-val mkUpgma : (float array array) -> int -> tree * leaves
+val mk_upgma : (float array array) -> int -> tree * leaves
 
 (** [minHomology tree]
 	@return the minimum homology in the tree
 	(allowing us to tune the graphical output) *)
-val minHomology : tree -> float
+val min_homology : tree -> float
 
 (** A transform function allows us to transform 2D coordinates *)
 type transform = float * float -> float * float
@@ -49,7 +49,7 @@ type link_info = string array * string
    Writes the genotypes on an svg output
    (using higher order IO from the extlib library)
  *)
-val writeGenos : 'a IO.output -> transform -> Genotype.t array -> leaves -> link_info option -> unit
+val write_genos : 'a IO.output -> transform -> Genotype.t array -> leaves -> link_info option -> unit
 
 (**
    [header width height]
@@ -61,4 +61,4 @@ val header : int -> int -> string
    [writeSvgFile genotypes link_info tree leaves filename]
    prints the tree as an svg picture in [filename]
 *)
-val writeSvgFile : Genotype.t array -> link_info option -> tree -> leaves -> string -> int * int
+val write_svg_file : Genotype.t array -> link_info option -> tree -> leaves -> string -> int * int

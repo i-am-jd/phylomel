@@ -32,20 +32,20 @@ let height = function
 
 (** [leavesNb tree]
 	@return Number of leaves in a tree *)
-let leavesNb = function
+let leaves_nb = function
 	| Leaf(l) -> 1
 	| Node(n) -> n.leaves_nb
 
 (** [pos tree]
 	@return y position of a node *)
-let getPos = function
+let get_pos = function
 	| Leaf(l) -> float_of_int l.index
 	| Node(n) -> n.pos
 
-(** [getHomology tree]
+(** [get_homology tree]
 	@return homology percentage between the subtrees of a node,
             or 100. for a leaf *)
-let getHomology = function
+let get_homology = function
 	| Leaf(l) -> 100.0
 	| Node(n) -> n.homology
 
@@ -56,18 +56,18 @@ let homology diff geno_size =
 	let size = float_of_int geno_size in
 	(size -. diff) /. size *. 100.0
 
-(** [mkLeaf value]
+(** [mk_leaf value]
     @return a new leaf mapping to the [genotype_array.(value)] *)
-let mkLeaf value =
+let mk_leaf value =
 	let l = { value = value; index = 0; } in
 	Leaf(l)
 	
-(** [mkNode t1 t2 h]
+(** [mk_node t1 t2 h]
 	@return a new node of subtrees t1,t2 with a homology percentage of h*)
-let mkNode t1 t2 homology =
+let mk_node t1 t2 homology =
 	{ t1 = t1;
 	  t2 = t2;
 	  height = (max (height t1) (height t2) ) + 1;
-	  leaves_nb = (leavesNb t1) + (leavesNb t2);
+	  leaves_nb = (leaves_nb t1) + (leaves_nb t2);
 	  homology = homology;
 	  pos = 0.0 }
