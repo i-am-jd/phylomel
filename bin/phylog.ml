@@ -17,7 +17,8 @@ let () =
 
 		let genos, gsize = Genotype.read_file geno_file in
 		let dist_mat = GenoMat.create genos in
-		let tree = Tree.prim_clique dist_mat gsize in
-		let fig = Phylogram.radialLayout 800. tree in
+		let tree = Tree.prim_complete gsize dist_mat in
+		let fig = Phylogram.radial_layout 800. tree in
 
-		Phylogram.writeSvgFile svg_file fig
+		Phylogram.write_svg_file fig svg_file
+

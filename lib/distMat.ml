@@ -154,3 +154,17 @@ let sub m1 m2 =
 		raise Wrong_substraction
 	else
 		init len1 (fun i j -> m1.(i).(j) - m2.(i).(j))
+
+let max m =
+	let dim = Array.length m in
+	if dim = 0 || Array.length m.(0) == 0 then
+		invalid_arg "DistMat.max"
+	else
+		let max = ref m.(1).(0) in
+		for i=0 to dim - 1 do
+			for j=0 to i-1 do
+				if m.(i).(j) > !max then
+					max := m.(i).(j)
+			done
+		done;
+		!max

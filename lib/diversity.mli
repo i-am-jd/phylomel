@@ -9,4 +9,4 @@
 	 - simpson diversity index
 *)
 val simpson : Genotype.t array -> float
-val simpsonConfidenceInterval : Genotype.t array -> float * (float * float)
+val simpson_confidence_interval : Genotype.t array -> float * (float * float)

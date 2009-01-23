@@ -48,4 +48,4 @@ val fold_right : ('a -> 'b -> 'b) -> 'a array array -> 'b -> 'b
 val get : 'a t -> int -> int -> 'a
 val unsafe_get : 'a t -> int -> int -> 'a
 val set : 'a t -> int -> int -> 'a -> unit
-
+val max : 'a array array -> 'a
