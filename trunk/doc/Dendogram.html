@@ -1,0 +1,239 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="previous" href="DynMat.html">
+<link rel="next" href="Tree.html">
+<link rel="Up" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of exceptions" rel=Appendix href="index_exceptions.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="DistMat" rel="Chapter" href="DistMat.html">
+<link title="Genotype" rel="Chapter" href="Genotype.html">
+<link title="Genotypes" rel="Chapter" href="Genotypes.html">
+<link title="GenoMat" rel="Chapter" href="GenoMat.html">
+<link title="DynMat" rel="Chapter" href="DynMat.html">
+<link title="Dendogram" rel="Chapter" href="Dendogram.html">
+<link title="Tree" rel="Chapter" href="Tree.html">
+<link title="Clustering" rel="Chapter" href="Clustering.html">
+<link title="BarnesHut" rel="Chapter" href="BarnesHut.html"><link title="Other functions of internal use" rel="Section" href="#3_Otherfunctionsofinternaluse">
+<link title="Types" rel="Subsection" href="#4_Types">
+<link title="Accessors" rel="Subsection" href="#4_Accessors">
+<link title="Printing" rel="Subsection" href="#4_Printing">
+<title>Dendogram</title>
+</head>
+<body>
+<div class="navbar"><a href="DynMat.html">Previous</a>
+&nbsp;<a href="index.html">Up</a>
+&nbsp;<a href="Tree.html">Next</a>
+</div>
+<center><h1>Module <a href="type_Dendogram.html">Dendogram</a></h1></center>
+<br>
+<pre><span class="keyword">module</span> Dendogram: <code class="code">sig</code> <a href="Dendogram.html">..</a> <code class="code">end</code></pre>Types and common functions for dendograms<br>
+<hr width="100%">
+<br>
+A dendogram is an unrooted tree for visual classification of similarity.
+   Here we define its type and common basic functions.
+<p>
+
+   The homology is the percentage of similarity.<br>
+<br>
+<a name="4_Types"></a>
+<h4>Types</h4><br>
+<br>
+The tree itself is defined as an algebraic datatype<br>
+<br><code><span class="keyword">type</span> <a name="TYPEleaf"></a><code class="type"></code>leaf = {</code><table class="typetable">
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code>value&nbsp;: <code class="type">int</code>;</code></td>
+<td class="typefieldcomment" align="left" valign="top" ><code>(*</code></td><td class="typefieldcomment" align="left" valign="top" >Each leaf maps the genotype of index value</td><td class="typefieldcomment" align="left" valign="bottom" ><code>*)</code></td>
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code><span class="keyword">mutable&nbsp;</span>index&nbsp;: <code class="type">int</code>;</code></td>
+<td class="typefieldcomment" align="left" valign="top" ><code>(*</code></td><td class="typefieldcomment" align="left" valign="top" >Position of the genotype in the dendogram</td><td class="typefieldcomment" align="left" valign="bottom" ><code>*)</code></td>
+</tr></table>
+}
+
+
+<br><code><span class="keyword">type</span> <a name="TYPEnode"></a><code class="type"></code>node = {</code><table class="typetable">
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code>t1&nbsp;: <code class="type"><a href="Dendogram.html#TYPEtree">tree</a></code>;</code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code>t2&nbsp;: <code class="type"><a href="Dendogram.html#TYPEtree">tree</a></code>;</code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code>height&nbsp;: <code class="type">int</code>;</code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code>leaves_nb&nbsp;: <code class="type">int</code>;</code></td>
+<td class="typefieldcomment" align="left" valign="top" ><code>(*</code></td><td class="typefieldcomment" align="left" valign="top" >Number of leaves in the subtree</td><td class="typefieldcomment" align="left" valign="bottom" ><code>*)</code></td>
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code>homology&nbsp;: <code class="type">float</code>;</code></td>
+<td class="typefieldcomment" align="left" valign="top" ><code>(*</code></td><td class="typefieldcomment" align="left" valign="top" >Homology between the t1 and t2</td><td class="typefieldcomment" align="left" valign="bottom" ><code>*)</code></td>
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code><span class="keyword">mutable&nbsp;</span>pos&nbsp;: <code class="type">float</code>;</code></td>
+<td class="typefieldcomment" align="left" valign="top" ><code>(*</code></td><td class="typefieldcomment" align="left" valign="top" >Position of the node along the y-axis in the dendogram</td><td class="typefieldcomment" align="left" valign="bottom" ><code>*)</code></td>
+</tr></table>
+}
+
+
+<br><code><span class="keyword">type</span> <a name="TYPEtree"></a><code class="type"></code>tree = </code><table class="typetable">
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span class="constructor">Leaf</span> <span class="keyword">of</span> <code class="type"><a href="Dendogram.html#TYPEleaf">leaf</a></code></code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span class="constructor">Node</span> <span class="keyword">of</span> <code class="type"><a href="Dendogram.html#TYPEnode">node</a></code></code></td>
+
+</tr></table>
+
+
+<br>
+A dendogram encapsulates a tree with values needed to print it<br>
+<br><code><span class="keyword">type</span> <a name="TYPEt"></a><code class="type"></code>t = {</code><table class="typetable">
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code>coll&nbsp;: <code class="type"><a href="Genotypes.html#TYPEt">Genotypes.t</a></code>;</code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code>tree&nbsp;: <code class="type"><a href="Dendogram.html#TYPEtree">tree</a></code>;</code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code>leaves&nbsp;: <code class="type"><a href="Dendogram.html#TYPEleaf">leaf</a> list</code>;</code></td>
+
+</tr></table>
+}
+
+
+<pre><span class="keyword">val</span> <a name="VALcreate"></a>create : <code class="type"><a href="Genotypes.html#TYPEt">Genotypes.t</a> -> <a href="Dendogram.html#TYPEtree">tree</a> -> <a href="Dendogram.html#TYPEleaf">leaf</a> list -> <a href="Dendogram.html#TYPEt">t</a></code></pre><br>
+<a name="5_Constructors"></a>
+<h5>Constructors</h5><br>
+<pre><span class="keyword">val</span> <a name="VALmk_leaf"></a>mk_leaf : <code class="type">int -> <a href="Dendogram.html#TYPEtree">tree</a></code></pre><div class="info">
+<code class="code">mkLeaf i</code><br>
+<b>Returns</b> a new leaf pointing to the genotype of index i<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALmk_node"></a>mk_node : <code class="type"><a href="Dendogram.html#TYPEtree">tree</a> -> <a href="Dendogram.html#TYPEtree">tree</a> -> float -> <a href="Dendogram.html#TYPEnode">node</a></code></pre><div class="info">
+<code class="code">mkNode t1 t2 h</code><br>
+<b>Returns</b> a new node of subtrees <code class="code">t1</code> and <code class="code">t2</code>,
+	h being the homology between <code class="code">t1</code> and <code class="code">t2</code><br>
+</div>
+<br>
+<a name="4_Accessors"></a>
+<h4>Accessors</h4><br>
+<pre><span class="keyword">val</span> <a name="VALheight"></a>height : <code class="type"><a href="Dendogram.html#TYPEtree">tree</a> -> int</code></pre><div class="info">
+<code class="code">height tree</code><br>
+<b>Returns</b> the height of a tree (0 for leaves)<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALleaves_nb"></a>leaves_nb : <code class="type"><a href="Dendogram.html#TYPEtree">tree</a> -> int</code></pre><div class="info">
+<code class="code">leavesNb tree</code><br>
+<b>Returns</b> the number of leaves in a tree<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALget_pos"></a>get_pos : <code class="type"><a href="Dendogram.html#TYPEtree">tree</a> -> float</code></pre><div class="info">
+<code class="code">getPos tree</code><br>
+<b>Returns</b> the vertical position of a node<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALget_homology"></a>get_homology : <code class="type"><a href="Dendogram.html#TYPEtree">tree</a> -> float</code></pre><div class="info">
+<code class="code">getHomology tree</code><br>
+<b>Returns</b> the homology between the subtrees of a node<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALhomology"></a>homology : <code class="type">float -> int -> float</code></pre><div class="info">
+<code class="code">homology geno_size diff</code><br>
+<b>Returns</b> the homology between two genotypes of length <code class="code">geno_size</code> with <code class="code">diff</code>
+   differences<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALmin_homology"></a>min_homology : <code class="type"><a href="Dendogram.html#TYPEtree">tree</a> -> float</code></pre><div class="info">
+<code class="code">minHomology tree</code><br>
+<b>Returns</b> the minimum homology in the tree
+	(allowing us to tune the graphical output)<br>
+</div>
+<br>
+<a name="4_Printing"></a>
+<h4>Printing</h4><br>
+<pre><span class="keyword">type</span> <a name="TYPEtransform"></a><code class="type"></code>transform = <code class="type">float * float -> float * float</code> </pre>
+<div class="info">
+A transform function allows us to transform 2D coordinates<br>
+</div>
+
+<pre><span class="keyword">type</span> <a name="TYPElinks"></a><code class="type"></code>links = <code class="type">string array * string</code> </pre>
+<div class="info">
+The <code class="code">link_info</code> type allows us to specify links on the genotypes of the
+	graphical output.
+<p>
+<ul>
+<li><code class="code">string array</code> : hypertext links</li>
+<li><code class="code">string</code> : target field in each hypertext link</li>
+</ul>
+<br>
+</div>
+
+<pre><span class="keyword">val</span> <a name="VALheader"></a>header : <code class="type">int -> int -> string</code></pre><div class="info">
+<code class="code">header width height</code><br>
+<b>Returns</b> an Svg header<br>
+</div>
+<br>
+Below are functions writing svg.
+	They use ExtLib's higher-order abstract io<br>
+<br>
+Variables named ddg are dendograms<br>
+<pre><span class="keyword">val</span> <a name="VALwrite_svg"></a>write_svg : <code class="type">'a IO.output -><br>       ?links_info:<a href="Dendogram.html#TYPElinks">links</a> option -> <a href="Dendogram.html#TYPEt">t</a> -> 'a * int * int</code></pre><div class="info">
+<code class="code">write_svg out ~links_info ddg</code>
+   prints the tree as an svg picture in <code class="code">out</code><br>
+<b>Returns</b> output, width, height<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALwrite_svg_file"></a>write_svg_file : <code class="type">string -> ?links_info:<a href="Dendogram.html#TYPElinks">links</a> option -> <a href="Dendogram.html#TYPEt">t</a> -> int * int</code></pre><div class="info">
+<code class="code">write_svg_file file ~links_info ddg</code>
+   prints the tree as an svg picture in <code class="code">file</code> and closes it<br>
+<b>Returns</b> width, height<br>
+</div>
+<br>
+<a name="3_Otherfunctionsofinternaluse"></a>
+<h3>Other functions of internal use</h3><br>
+<pre><span class="keyword">val</span> <a name="VALwrite_svg_leaves"></a>write_svg_leaves : <code class="type">'a IO.output -><br>       ?links_info:<a href="Dendogram.html#TYPElinks">links</a> option -><br>       <a href="Dendogram.html#TYPEt">t</a> -> <a href="Dendogram.html#TYPEtransform">transform</a> -> unit</code></pre><pre><span class="keyword">val</span> <a name="VALwrite_svg_nodes"></a>write_svg_nodes : <code class="type">'a IO.output -> <a href="Dendogram.html#TYPEt">t</a> -> <a href="Dendogram.html#TYPEtransform">transform</a> -> unit</code></pre></body></html>

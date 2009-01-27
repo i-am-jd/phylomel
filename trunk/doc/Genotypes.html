@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="previous" href="Genotype.html">
+<link rel="next" href="GenoMat.html">
+<link rel="Up" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of exceptions" rel=Appendix href="index_exceptions.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="DistMat" rel="Chapter" href="DistMat.html">
+<link title="Genotype" rel="Chapter" href="Genotype.html">
+<link title="Genotypes" rel="Chapter" href="Genotypes.html">
+<link title="GenoMat" rel="Chapter" href="GenoMat.html">
+<link title="DynMat" rel="Chapter" href="DynMat.html">
+<link title="Dendogram" rel="Chapter" href="Dendogram.html">
+<link title="Tree" rel="Chapter" href="Tree.html">
+<link title="Clustering" rel="Chapter" href="Clustering.html">
+<link title="BarnesHut" rel="Chapter" href="BarnesHut.html"><link title="Main type and functions" rel="Section" href="#4_Maintypeandfunctions">
+<link title="Reading files" rel="Section" href="#4_Readingfiles">
+<title>Genotypes</title>
+</head>
+<body>
+<div class="navbar"><a href="Genotype.html">Previous</a>
+&nbsp;<a href="index.html">Up</a>
+&nbsp;<a href="GenoMat.html">Next</a>
+</div>
+<center><h1>Module <a href="type_Genotypes.html">Genotypes</a></h1></center>
+<br>
+<pre><span class="keyword">module</span> Genotypes: <code class="code">sig</code> <a href="Genotypes.html">..</a> <code class="code">end</code></pre>Collection of genotypes<br>
+<hr width="100%">
+<br>
+Please read first the Genotype module documentation<br>
+<br>
+This module implements operations on collection of genotypes<br>
+<br>
+Convention : a variable named "c" is a collection of genotypes<br>
+<br>
+<a name="4_Maintypeandfunctions"></a>
+<h4>Main type and functions</h4><br>
+<br><code><span class="keyword">type</span> <a name="TYPEt"></a><code class="type"></code>t = {</code><table class="typetable">
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code>genos&nbsp;: <code class="type"><a href="Genotype.html#TYPEt">Genotype.t</a> array</code>;</code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code>fields&nbsp;: <code class="type">string array</code>;</code></td>
+<td class="typefieldcomment" align="left" valign="top" ><code>(*</code></td><td class="typefieldcomment" align="left" valign="top" >exemple : <code class="code">|"Country";"City";"Year"|</code></td><td class="typefieldcomment" align="left" valign="bottom" ><code>*)</code></td>
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code>geno_size&nbsp;: <code class="type">int</code>;</code></td>
+<td class="typefieldcomment" align="left" valign="top" ><code>(*</code></td><td class="typefieldcomment" align="left" valign="top" >genos' number of markers</td><td class="typefieldcomment" align="left" valign="bottom" ><code>*)</code></td>
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code>size&nbsp;: <code class="type">int</code>;</code></td>
+<td class="typefieldcomment" align="left" valign="top" ><code>(*</code></td><td class="typefieldcomment" align="left" valign="top" >number of genotypes</td><td class="typefieldcomment" align="left" valign="bottom" ><code>*)</code></td>
+</tr></table>
+}
+
+<div class="info">
+Genotype collection<br>
+</div>
+
+<pre><span class="keyword">val</span> <a name="VALcheck_fields_nb"></a>check_fields_nb : <code class="type"><a href="Genotypes.html#TYPEt">t</a> -> bool</code></pre><div class="info">
+<code class="code">check_fields_nb c</code><br>
+<b>Returns</b> true if the genotypes all have the
+	right number of infos (which is the size of <code class="code">c.fields</code>)<br>
+</div>
+<br>
+<a name="4_Readingfiles"></a>
+<h4>Reading files</h4><br>
+<br>
+Exemple of markers' string representation : 1,4,3,5.6,8<br>
+<br>
+Format of a line in a file: genotype_id;markers;info1;info2;...<br>
+<br>
+exemple : 12;2,4,4,5;France;Paris;2009<br>
+<br>
+Each line has at least a genotype id and markers<br>
+<pre><span class="keyword">val</span> <a name="VALread_markers"></a>read_markers : <code class="type">string -> float array</code></pre><div class="info">
+<code class="code">read_markers s</code><br>
+<b>Raises</b> <code>Invalid_argument</code> "Genotypes.read_markers"<br>
+<b>Returns</b> an array of markers read from s<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALread_line"></a>read_line : <code class="type">string -> <a href="Genotype.html#TYPEt">Genotype.t</a></code></pre><div class="info">
+<code class="code">read_line s</code><br>
+<b>Raises</b> <code>Invalid_argument</code> "Genotypes.read_line"<br>
+<b>Returns</b> a genotype<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALread_lines"></a>read_lines : <code class="type">string Enum.t -> <a href="Genotypes.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">read_lines lines</code> reads an enumeration of lines<br>
+<b>Raises</b> <code>Invalid_argument</code> "Genotypes.read_lines"<br>
+<b>Returns</b> the collection<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALread_file"></a>read_file : <code class="type">string -> <a href="Genotypes.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">read_file file_name</code> reads a file<br>
+<b>Returns</b> the collection<br>
+</div>
+</body></html>

@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="previous" href="Tree.html">
+<link rel="next" href="BarnesHut.html">
+<link rel="Up" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of exceptions" rel=Appendix href="index_exceptions.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="DistMat" rel="Chapter" href="DistMat.html">
+<link title="Genotype" rel="Chapter" href="Genotype.html">
+<link title="Genotypes" rel="Chapter" href="Genotypes.html">
+<link title="GenoMat" rel="Chapter" href="GenoMat.html">
+<link title="DynMat" rel="Chapter" href="DynMat.html">
+<link title="Dendogram" rel="Chapter" href="Dendogram.html">
+<link title="Tree" rel="Chapter" href="Tree.html">
+<link title="Clustering" rel="Chapter" href="Clustering.html">
+<link title="BarnesHut" rel="Chapter" href="BarnesHut.html"><link title="Building trees " rel="Section" href="#4_Buildingtrees">
+<title>Clustering</title>
+</head>
+<body>
+<div class="navbar"><a href="Tree.html">Previous</a>
+&nbsp;<a href="index.html">Up</a>
+&nbsp;<a href="BarnesHut.html">Next</a>
+</div>
+<center><h1>Module <a href="type_Clustering.html">Clustering</a></h1></center>
+<br>
+<pre><span class="keyword">module</span> Clustering: <code class="code">sig</code> <a href="Clustering.html">..</a> <code class="code">end</code></pre>Creates phylogenetic trees with clustering methods (UPGMA, WPGMA)<br>
+<hr width="100%">
+<br>
+Creates phylogenetic trees with clustering methods (UPGMA, WPGMA)<br>
+<br>
+We use the data types provided by the <code class="code">Unrooted</code> module.<br>
+<br>
+<a name="4_Buildingtrees"></a>
+<h4>Building trees </h4><br>
+<pre><span class="keyword">type</span> <a name="TYPEtree"></a><code class="type"></code>tree = <code class="type"><a href="Dendogram.html#TYPEtree">Dendogram.tree</a></code> </pre>
+
+<pre><span class="keyword">type</span> <a name="TYPEleaves"></a><code class="type"></code>leaves = <code class="type"><a href="Dendogram.html#TYPEleaf">Dendogram.leaf</a> list</code> </pre>
+
+<pre><span class="keyword">val</span> <a name="VALleaves_of_tree"></a>leaves_of_tree : <code class="type"><a href="Clustering.html#TYPEtree">tree</a> -> <a href="Clustering.html#TYPEleaves">leaves</a></code></pre><div class="info">
+<code class="code">leavesOfTree tree</code><br>
+<b>Returns</b> the leaves of the tree in a list,
+	sorted to make sure that leaves belonging to the same node are
+	contiguous in the tree.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALupgma"></a>upgma : <code class="type">float array array -> <a href="Genotypes.html#TYPEt">Genotypes.t</a> -> <a href="Dendogram.html#TYPEt">Dendogram.t</a></code></pre><div class="info">
+<code class="code">upgma distance_matrix genotypes_collection</code><br>
+<b>Returns</b> an unrooted tree built with the UPGMA method<br>
+</div>
+</body></html>
