@@ -87,7 +87,7 @@ let create_figure points w h tree =
 	  h = h;
 	  tree = tree }
 
-let radial_layout ?(margin= (10.,10.)) w tree =
+let radial_layout ?(margin= (10.,10.)) width tree =
 	let n = Tree.size tree in
 	let foi = float_of_int in
 
@@ -134,8 +134,8 @@ let radial_layout ?(margin= (10.,10.)) w tree =
 	(* unsafe_reframe margin xs;
 	unsafe_crop_width (w-.2.*.x0) xs;*)
 	
-	let h = height xs +. 2. *. y0 in
-	create_figure xs w h tree
+	let height = height xs +. 2. *. y0 in
+	create_figure xs width height tree
 
 
 (*
@@ -174,7 +174,7 @@ let print_points ps =
 
 let put_points out fig =
 	let printPoint {x=x; y=y} =
-		Svg.putCircle out
+		Svg.circle out
 			~fill:"lightsteelblue"
 			~stroke:"midnightblue"
 			~width:1.
@@ -191,19 +191,19 @@ let put_lines out fig =
 			let d = DistMat.get tree.dist_mat p i in
 			if d < 3 then (
 				let w = if d=1 then 2. else 1. in
-				Svg.putLine out
+				Svg.line out
 					~width:w
 					(m.x, m.y)
 					(ps.(p).x, ps.(p).y)
 			) else (
-				Svg.putDottedLine out
+				Svg.dotted_line out
 					~width:1.
 					~color:"grey"
 					(m.x, m.y)
 					(ps.(p).x, ps.(p).y);
-				Svg.putText out
+				Svg.text out
 					~anchor:"middle"
-					~fill:"black"
+					(*~fill:"black"*)
 					(string_of_int d)
 					( (m.x +. ps.(p).x) /. 2.,
 				      (m.y +. ps.(p).y) /. 2. +. 4.)) in
@@ -270,6 +270,7 @@ val fig : Phylomel.Vec2.t array =
 - : Phylomel.Vec2.t array =
 [|{x = 2.; y = 3.}; {x = 2.; y = 2.}; {x = 3.; y = 2.}; {x = 0.; y = 0.}|]
 # *)
+
 
 (*
 let fig = [|make 1. 2.; make 1. 1.; make 2. 1.|];;

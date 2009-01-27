@@ -1,14 +1,18 @@
 open Phylomel
 open Printf
 
-let writeSvg geno_file svg_file =
-    let genos, geno_size = Genotype.read_file geno_file in
-    let mat = GenoMat.createF genos in
-    let tree, leaves = Clustering.mk_upgma mat geno_size in
-    ignore (Clustering.write_svg_file genos None tree leaves svg_file)
-
 let () =
     if (Array.length Sys.argv) < 3 then
 		printf "usage : geno2svg input_file output_file\n"
     else
-		writeSvg Sys.argv.(1) Sys.argv.(2)
+		(*
+		  We extract 3 objects :
+		    - the genotypes collection
+		    - the distance matrix
+		    - the dendogram
+		*)
+		let collec = Genotypes.read_file Sys.argv.(1) in
+		let dmat = GenoMat.createF collec in
+		let dendogram = Clustering.upgma dmat collec in
+		ignore
+			(Dendogram.write_svg_file Sys.argv.(2) dendogram)

@@ -73,7 +73,7 @@ let map (f : 'a -> 'b) = function
 		  done;
 		  res
 			  
-let map_in_place (f : 'a -> 'b) matrix =
+let modif (f : 'a -> 'b) matrix =
 	for i=0 to (Array.length matrix) - 1 do
 		for j=0 to i - 1 do
 			matrix.(i).(j) <- f matrix.(i).(j)
@@ -94,7 +94,7 @@ let mapij (f : int -> int -> 'a -> 'b) = function
 		  done;
 		  res
 			  
-let mapij_in_place (f : int -> int -> 'a -> 'a) matrix =
+let modifij (f : int -> int -> 'a -> 'a) matrix =
 	for i=0 to (Array.length matrix) - 1 do
 		for j=0 to i - 1 do
 			matrix.(i).(j) <- f i j matrix.(i).(j)

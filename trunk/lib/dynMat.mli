@@ -1,4 +1,4 @@
-(** Resizable matrices *)
+(** Dynamic (resizable) matrices *)
 open ExtLib
 
 val print_line : float DynArray.t -> unit

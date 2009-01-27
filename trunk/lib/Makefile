@@ -5,21 +5,21 @@ SOURCES = \
 	distMat.ml \
 	genotype.mli \
 	genotype.ml \
+	genotypes.mli \
+	genotypes.ml \
 	genoMat.mli \
 	genoMat.ml \
 	dynMat.mli \
 	dynMat.ml \
+	svg.ml \
 	dendogram.mli \
 	dendogram.ml \
 	vec2.ml \
-	svg.ml \
 	tree.mli \
 	tree.ml \
 	phylogram.ml \
 	clustering.mli \
 	clustering.ml \
-	diversity.mli \
-	diversity.ml \
 	barnesHut.mli \
 	barnesHut.ml \
 	forceDirectedLayout.ml \

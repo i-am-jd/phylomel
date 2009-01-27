@@ -2,12 +2,10 @@
    Distance matrices
 *)
 
-(**
-   {L
-   This module allows us to manipulate distance matrices.
-   The genetic distance is the number of different markers.
-   In a distance matrix m, [get m i j] is the distance between
-   genotypes of index i and j.}
+(** This module allows us to manipulate distance matrices. *)
+(** The genetic distance is the number of different markers.
+    In a distance matrix m, [get m i j] is the distance between
+    genotypes of index i and j.
 
    {b Example :}
 
@@ -17,10 +15,10 @@
       - g2 = 1 0 1 2
 
 
-   Their distance is given by the distance function [d] :
-   - d(g0,g1) = 1
-   - d(g0,g2) = 1
-   - d(g1,g2) = 2
+   Their distance is given by the distance function [Genotype.diff] :
+   - diff(g0,g1) = 1
+   - diff(g0,g2) = 1
+   - diff(g1,g2) = 2
    
    The distance matrix is :
    [[|
@@ -40,9 +38,9 @@ val init : int -> (int -> int -> 'a) -> 'a array array
 val iter : ('a -> unit) -> 'a array array -> unit
 val iterij : (int -> int -> 'a -> unit) -> 'a array array -> unit
 val map : ('a -> 'b) -> 'a array array -> 'b array array
-val map_in_place : ('a -> 'a) -> 'a array array -> unit
+val modif : ('a -> 'a) -> 'a array array -> unit
 val mapij : (int -> int -> 'a -> 'b) -> 'a array array -> 'b array array
-val mapij_in_place : (int -> int -> 'a -> 'a) -> 'a array array -> unit
+val modifij : (int -> int -> 'a -> 'a) -> 'a array array -> unit
 val fold_left : ('a -> 'b -> 'a) -> 'a -> 'b array array -> 'a
 val fold_right : ('a -> 'b -> 'b) -> 'a array array -> 'b -> 'b
 val get : 'a t -> int -> int -> 'a
