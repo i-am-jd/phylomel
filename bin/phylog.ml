@@ -1,5 +1,6 @@
 open Phylomel
 open Printf
+open Genotypes
 open Phylogram
 
 let () =
@@ -10,14 +11,14 @@ let () =
 		let svg_file = Sys.argv.(2) in
 
 		(* We create four things :
-		     - genotypes
+		     - genotypes collection
 		     - distance matrix
 		     - minimum spanning tree
 		     - figure (graphical tree) *)
 
-		let genos, gsize = Genotype.read_file geno_file in
-		let dist_mat = GenoMat.create genos in
-		let tree = Tree.prim_complete gsize dist_mat in
+		let collec = Genotypes.read_file geno_file in
+		let dmat = GenoMat.create collec in
+		let tree = Tree.prim_complete collec.geno_size dmat in
 		let fig = Phylogram.radial_layout 800. tree in
 
 		Phylogram.write_svg_file fig svg_file

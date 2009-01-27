@@ -2,7 +2,6 @@ open ExtLib
 
 (** Handles phylogenetic minimum spanning trees *)
 
-(** Main type *)
 type t = {
 	adj_mat : bool DistMat.t;  (** Adjacency matrix *)
 	dist_mat : int DistMat.t;  (** Distance matrix  *)

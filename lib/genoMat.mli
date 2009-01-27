@@ -1,7 +1,12 @@
 (** Genetic distance matrices *)
 
-(** @return a distance matrix inferred from an array of genotypes *)
-val create : Genotype.t array -> int array array
+(** Functions postfixed with an "F" deal with float matrices *)
+
+(** {4 Integer distance matrices} *)
+
+(** [create collec]
+    @return a distance matrix inferred from a collection of genotypes *)
+val create : Genotypes.t -> int array array
 
 (** [get matrix i j]
 	@return genetic distance between the genotypes of index [i] and [j] *)
@@ -11,9 +16,12 @@ val get : int array array -> int -> int -> int
 	@return a distance matrix of size [dim] filled with 0s *)
 val empty : int -> int array array
 
-(** [createF genos]
-	@return same matrix as [create genos] but filled with floats *)
-val createF : Genotype.t array -> float array array
+(** {4 Float distance matrices} *)
+
+(** [createF collec]
+	* @return a float distance matrix inferred
+	from a collection of genotypes *)
+val createF : Genotypes.t -> float array array
 
 (** [emptyF dim]
 	@return a distance matrix of size [dim] filled with 0.0 *)
@@ -30,7 +38,9 @@ val toFloat : int array array -> float array array
 	@param genos genotype array
 	@param gsize size of the genotypes in [genos]
 	@return a distance matrix filled with difference percentages *)
-val createP : Genotype.t array * int -> float array array
+val createP : Genotypes.t -> float array array
+
+(** {4 Other functions} *)
 
 val print : int array array -> unit
 val printF : float array array -> unit

@@ -1,46 +1,26 @@
-(**Genotype manipulation : collections, printing, parsing*)
+(** Genotype functions*)
+
+(** This module implements a genotype and its common functions *)
 
 type t = {
-	id : string;
-	info : string;
-	tab : float array; (** Markers array *)
+    id : string;
+    markers : float array;
+	infos : string array;
+	  (** exemple : [|France; Paris; 2009|] *)
 }
 
-exception Wrong_size
-
-(** A genotype collection is a pair consisting of an array of genotypes
-	and their length *)
-type collection = t array * int
-
-exception Bad_collection
-exception Bad_file
-
-(** @return size of a genotype *)
+(** [size g] @return number of markers *)
 val size : t -> int
 
-(** @return number of different markers between 2 genotypes *)
+(** [diff g1 g2] @return number of different markers *)
 val diff : t -> t -> int
 
-(** [print g] prints [g] on the standard output *)
-val print : t -> unit
+(** [markers_nb gs]
+	@return
+	 - [Some size] where size if the common number of markers
+	   of the genotypes
+	 - [None] if the genotypes have different sizes *)
+val markers_nb : t array -> int option
 
-(** [checkGenosSize genos]
-	@raise Bad_collection if the genotypes are not
-	all of the same length
-    @return size of the genotypes in [genos]*)
-val check_genos_size : t array -> int
-
-(** @return a genotype read from a string *)
-val parse_line : string -> t
-
-(** [readFile file_name]
-	@return a genotypes collection read from [file_name]
-	@raise Bad_file if the file is invalid
-*)
-
-(*
-	A valid file would be : \\
-	g0;france;1,2,3.5,9 \\
-	g1;niger,2,5,6,3
-*)
-val read_file : string -> collection
+(** [description g] @return the concatenation of [g.id] and [g.infos] *)
+val description : t -> string
