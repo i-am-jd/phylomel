@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="previous" href="DistMat.html">
+<link rel="next" href="Genotypes.html">
+<link rel="Up" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of exceptions" rel=Appendix href="index_exceptions.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="DistMat" rel="Chapter" href="DistMat.html">
+<link title="Genotype" rel="Chapter" href="Genotype.html">
+<link title="Genotypes" rel="Chapter" href="Genotypes.html">
+<link title="GenoMat" rel="Chapter" href="GenoMat.html">
+<link title="DynMat" rel="Chapter" href="DynMat.html">
+<link title="Dendogram" rel="Chapter" href="Dendogram.html">
+<link title="Tree" rel="Chapter" href="Tree.html">
+<link title="Clustering" rel="Chapter" href="Clustering.html">
+<link title="BarnesHut" rel="Chapter" href="BarnesHut.html"><title>Genotype</title>
+</head>
+<body>
+<div class="navbar"><a href="DistMat.html">Previous</a>
+&nbsp;<a href="index.html">Up</a>
+&nbsp;<a href="Genotypes.html">Next</a>
+</div>
+<center><h1>Module <a href="type_Genotype.html">Genotype</a></h1></center>
+<br>
+<pre><span class="keyword">module</span> Genotype: <code class="code">sig</code> <a href="Genotype.html">..</a> <code class="code">end</code></pre>Genotype functions<br>
+<hr width="100%">
+<br>
+This module implements a genotype and its common functions<br>
+<br><code><span class="keyword">type</span> <a name="TYPEt"></a><code class="type"></code>t = {</code><table class="typetable">
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code>id&nbsp;: <code class="type">string</code>;</code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code>markers&nbsp;: <code class="type">float array</code>;</code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code>infos&nbsp;: <code class="type">string array</code>;</code></td>
+<td class="typefieldcomment" align="left" valign="top" ><code>(*</code></td><td class="typefieldcomment" align="left" valign="top" >exemple : <code class="code">|France; Paris; 2009|</code></td><td class="typefieldcomment" align="left" valign="bottom" ><code>*)</code></td>
+</tr></table>
+}
+
+
+<pre><span class="keyword">val</span> <a name="VALsize"></a>size : <code class="type"><a href="Genotype.html#TYPEt">t</a> -> int</code></pre><div class="info">
+<code class="code">size g</code><br>
+<b>Returns</b> number of markers<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALdiff"></a>diff : <code class="type"><a href="Genotype.html#TYPEt">t</a> -> <a href="Genotype.html#TYPEt">t</a> -> int</code></pre><div class="info">
+<code class="code">diff g1 g2</code><br>
+<b>Returns</b> number of different markers<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALmarkers_nb"></a>markers_nb : <code class="type"><a href="Genotype.html#TYPEt">t</a> array -> int option</code></pre><div class="info">
+<code class="code">markers_nb gs</code><br>
+<b>Returns</b> - <code class="code">Some size</code> where size if the common number of markers
+	   of the genotypes<ul>
+<li><code class="code">None</code> if the genotypes have different sizes</li>
+</ul>
+<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALdescription"></a>description : <code class="type"><a href="Genotype.html#TYPEt">t</a> -> string</code></pre><div class="info">
+<code class="code">description g</code><br>
+<b>Returns</b> the concatenation of <code class="code">g.id</code> and <code class="code">g.infos</code><br>
+</div>
+</body></html>

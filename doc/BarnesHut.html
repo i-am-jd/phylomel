@@ -1,0 +1,210 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="previous" href="Clustering.html">
+<link rel="Up" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of exceptions" rel=Appendix href="index_exceptions.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="DistMat" rel="Chapter" href="DistMat.html">
+<link title="Genotype" rel="Chapter" href="Genotype.html">
+<link title="Genotypes" rel="Chapter" href="Genotypes.html">
+<link title="GenoMat" rel="Chapter" href="GenoMat.html">
+<link title="DynMat" rel="Chapter" href="DynMat.html">
+<link title="Dendogram" rel="Chapter" href="Dendogram.html">
+<link title="Tree" rel="Chapter" href="Tree.html">
+<link title="Clustering" rel="Chapter" href="Clustering.html">
+<link title="BarnesHut" rel="Chapter" href="BarnesHut.html"><title>BarnesHut</title>
+</head>
+<body>
+<div class="navbar"><a href="Clustering.html">Previous</a>
+&nbsp;<a href="index.html">Up</a>
+&nbsp;</div>
+<center><h1>Module <a href="type_BarnesHut.html">BarnesHut</a></h1></center>
+<br>
+<pre><span class="keyword">module</span> BarnesHut: <code class="code">sig</code> <a href="BarnesHut.html">..</a> <code class="code">end</code></pre>Barnes-Hut tree code<br>
+<hr width="100%">
+<br>
+Barnes-Hut tree code<br>
+<br>
+Allows for n log(n) calculation on the n-body simulation<br>
+<br><code><span class="keyword">type</span> <a name="TYPEbody"></a><code class="type"></code>body = {</code><table class="typetable">
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code>p&nbsp;: <code class="type">Vec2.t</code>;</code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code>v&nbsp;: <code class="type">Vec2.t</code>;</code></td>
+
+</tr></table>
+}
+
+
+<br><code><span class="keyword">type</span> <a name="TYPEbounds"></a><code class="type"></code>bounds = {</code><table class="typetable">
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code><span class="keyword">mutable&nbsp;</span>x0&nbsp;: <code class="type">float</code>;</code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code><span class="keyword">mutable&nbsp;</span>x1&nbsp;: <code class="type">float</code>;</code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code><span class="keyword">mutable&nbsp;</span>y0&nbsp;: <code class="type">float</code>;</code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code><span class="keyword">mutable&nbsp;</span>y1&nbsp;: <code class="type">float</code>;</code></td>
+
+</tr></table>
+}
+
+<div class="info">
+Bounds are stored (for efficiency) as a structure.
+	Each bound in the ith dimension is a half-open interval:
+	  <code class="code">x0</code> &lt;= x &lt; <code class="code">x1</code>
+      <code class="code">y0</code> &lt;= y &lt; <code class="code">y1</code><br>
+</div>
+
+<br><code><span class="keyword">type</span> <a name="TYPEcell"></a><code class="type"></code>cell = {</code><table class="typetable">
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code>mass&nbsp;: <code class="type">float</code>;</code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code>center&nbsp;: <code class="type">Vec2.t</code>;</code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code>bds&nbsp;: <code class="type"><a href="BarnesHut.html#TYPEbounds">bounds</a></code>;</code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code>sq_size&nbsp;: <code class="type">float</code>;</code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code>sub_ts&nbsp;: <code class="type"><a href="BarnesHut.html#TYPEtree">tree</a> array</code>;</code></td>
+
+</tr></table>
+}
+
+<div class="info">
+A cell contains, in order, the total mass, center of mass, cell
+	bounds, cell size squared, sub-cells.<br>
+</div>
+
+<br><code><span class="keyword">type</span> <a name="TYPEtree"></a><code class="type"></code>tree = </code><table class="typetable">
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span class="constructor">Empty</span></code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span class="constructor">Body</span> <span class="keyword">of</span> <code class="type"><a href="BarnesHut.html#TYPEbody">body</a></code></code></td>
+
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code><span class="keyword">|</span></code></td>
+<td align="left" valign="top" >
+<code><span class="constructor">Cell</span> <span class="keyword">of</span> <code class="type"><a href="BarnesHut.html#TYPEcell">cell</a></code></code></td>
+
+</tr></table>
+
+
+<pre><span class="keyword">val</span> <a name="VALmass"></a>mass : <code class="type"><a href="BarnesHut.html#TYPEtree">tree</a> -> float</code></pre><div class="info">
+<code class="code">mass t</code> returns the mass of the tree <code class="code">t</code><br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALcenter"></a>center : <code class="type"><a href="BarnesHut.html#TYPEtree">tree</a> -> Vec2.t</code></pre><div class="info">
+<code class="code">center t</code> returns the center of mass of the tree <code class="code">t</code><br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALin_bounds"></a>in_bounds : <code class="type"><a href="BarnesHut.html#TYPEbounds">bounds</a> -> <a href="BarnesHut.html#TYPEbody">body</a> -> bool</code></pre><div class="info">
+<code class="code">in_bounds bds v</code> checks whether <code class="code">v</code> is in the bounds given by
+	<code class="code">bds</code>.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALsquare"></a>square : <code class="type">float -> float</code></pre><pre><span class="keyword">val</span> <a name="VALsub_bounds"></a>sub_bounds : <code class="type"><a href="BarnesHut.html#TYPEbounds">bounds</a> -> <a href="BarnesHut.html#TYPEbounds">bounds</a> array</code></pre><div class="info">
+<code class="code">sub_bounds bds</code> returns an array of the 2^d (where d is the
+	dimension of the space---<code class="code">bs</code> is 2*d elements long) sub-bounds of
+	the <code class="code">bds</code> obtained by splitting the bounds in half on each
+	dimension.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALmake_null_bounds"></a>make_null_bounds : <code class="type">unit -> <a href="BarnesHut.html#TYPEbounds">bounds</a></code></pre><div class="info">
+<code class="code">make_null_bounds ()</code> returns a fresh set of bounds which enclose
+	<b>no</b> possible object.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALbounds_of_bodies"></a>bounds_of_bodies : <code class="type"><a href="BarnesHut.html#TYPEbody">body</a> list -> <a href="BarnesHut.html#TYPEbounds">bounds</a></code></pre><div class="info">
+<code class="code">bounds_of_bodies bs</code> returns a bounds which completely enclose
+	the given bodies <code class="code">bs</code>.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALbounds_size_squared"></a>bounds_size_squared : <code class="type"><a href="BarnesHut.html#TYPEbounds">bounds</a> -> float</code></pre><div class="info">
+<code class="code">bounds_size_squared bds</code> returns the size squared of the given
+	bounds (i.e. the sum of squares of distances along each
+	dimension).<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALmass_trees"></a>mass_trees : <code class="type"><a href="BarnesHut.html#TYPEtree">tree</a> array -> float</code></pre><div class="info">
+<code class="code">mass sts</code><br>
+<b>Returns</b> the mass of the subtrees<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALmass_barycenter"></a>mass_barycenter : <code class="type"><a href="BarnesHut.html#TYPEtree">tree</a> array -> float * Vec2.t</code></pre><div class="info">
+<code class="code">mass_barycenter sts</code><br>
+<b>Returns</b> the mass and barycenter of the subtrees<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALtree_of_bodies"></a>tree_of_bodies : <code class="type"><a href="BarnesHut.html#TYPEbody">body</a> list -> <a href="BarnesHut.html#TYPEtree">tree</a></code></pre><div class="info">
+<code class="code">tree_of_bodies bs</code><br>
+<b>Returns</b> a tree containing the bodies <code class="code">bs</code>.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALtree_of_bodies_array"></a>tree_of_bodies_array : <code class="type"><a href="BarnesHut.html#TYPEbody">body</a> array -> <a href="BarnesHut.html#TYPEtree">tree</a></code></pre><div class="info">
+<code class="code">tree_of_bodies_array bs</code><br>
+<b>Returns</b> a tree containing the bodies <code class="code">bs</code>.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALfold"></a>fold : <code class="type">('a -> <a href="BarnesHut.html#TYPEtree">tree</a> -> 'a) -> 'a -> <a href="BarnesHut.html#TYPEtree">tree</a> -> 'a</code></pre><div class="info">
+<code class="code">fold fn start t</code> is the fundamental tree iterator.  Alas, there
+	is no guarantee what the order of application of <code class="code">fn</code> is.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALcontains"></a>contains : <code class="type"><a href="BarnesHut.html#TYPEbody">body</a> -> <a href="BarnesHut.html#TYPEtree">tree</a> -> bool</code></pre><div class="info">
+<code class="code">contains b t</code> returns <code class="code">true</code> if <code class="code">t</code> contains <code class="code">b</code>.<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALdo_add_force_on"></a>do_add_force_on : <code class="type">Vec2.t -> Vec2.t -> Vec2.t -> float -> unit</code></pre><pre><span class="keyword">val</span> <a name="VALdo_calc_force"></a>do_calc_force : <code class="type">Vec2.t -> <a href="BarnesHut.html#TYPEbody">body</a> -> <a href="BarnesHut.html#TYPEtree">tree</a> -> unit</code></pre><pre><span class="keyword">val</span> <a name="VALdo_calc_forces"></a>do_calc_forces : <code class="type">Vec2.t array -> <a href="BarnesHut.html#TYPEbody">body</a> array -> <a href="BarnesHut.html#TYPEtree">tree</a> -> unit</code></pre></body></html>

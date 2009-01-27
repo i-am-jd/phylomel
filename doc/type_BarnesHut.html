@@ -1,0 +1,54 @@
+<html><head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of exceptions" rel=Appendix href="index_exceptions.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="DistMat" rel="Chapter" href="DistMat.html">
+<link title="Genotype" rel="Chapter" href="Genotype.html">
+<link title="Genotypes" rel="Chapter" href="Genotypes.html">
+<link title="GenoMat" rel="Chapter" href="GenoMat.html">
+<link title="DynMat" rel="Chapter" href="DynMat.html">
+<link title="Dendogram" rel="Chapter" href="Dendogram.html">
+<link title="Tree" rel="Chapter" href="Tree.html">
+<link title="Clustering" rel="Chapter" href="Clustering.html">
+<link title="BarnesHut" rel="Chapter" href="BarnesHut.html"><title>BarnesHut</title>
+</head>
+<body>
+<code class="code"><span class="keyword">sig</span><br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;body&nbsp;=&nbsp;{&nbsp;p&nbsp;:&nbsp;<span class="constructor">Vec2</span>.t;&nbsp;v&nbsp;:&nbsp;<span class="constructor">Vec2</span>.t;&nbsp;}<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;bounds&nbsp;=&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">mutable</span>&nbsp;x0&nbsp;:&nbsp;float;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">mutable</span>&nbsp;x1&nbsp;:&nbsp;float;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">mutable</span>&nbsp;y0&nbsp;:&nbsp;float;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">mutable</span>&nbsp;y1&nbsp;:&nbsp;float;<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;<span class="keyword">type</span>&nbsp;cell&nbsp;=&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;mass&nbsp;:&nbsp;float;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;center&nbsp;:&nbsp;<span class="constructor">Vec2</span>.t;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;bds&nbsp;:&nbsp;<span class="constructor">BarnesHut</span>.bounds;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;sq_size&nbsp;:&nbsp;float;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;sub_ts&nbsp;:&nbsp;<span class="constructor">BarnesHut</span>.tree&nbsp;array;<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;<span class="keyword">and</span>&nbsp;tree&nbsp;=&nbsp;<span class="constructor">Empty</span>&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">Body</span>&nbsp;<span class="keyword">of</span>&nbsp;<span class="constructor">BarnesHut</span>.body&nbsp;<span class="keywordsign">|</span>&nbsp;<span class="constructor">Cell</span>&nbsp;<span class="keyword">of</span>&nbsp;<span class="constructor">BarnesHut</span>.cell<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;mass&nbsp;:&nbsp;<span class="constructor">BarnesHut</span>.tree&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;float<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;center&nbsp;:&nbsp;<span class="constructor">BarnesHut</span>.tree&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Vec2</span>.t<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;in_bounds&nbsp;:&nbsp;<span class="constructor">BarnesHut</span>.bounds&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">BarnesHut</span>.body&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;square&nbsp;:&nbsp;float&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;float<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;sub_bounds&nbsp;:&nbsp;<span class="constructor">BarnesHut</span>.bounds&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">BarnesHut</span>.bounds&nbsp;array<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;make_null_bounds&nbsp;:&nbsp;unit&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">BarnesHut</span>.bounds<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;bounds_of_bodies&nbsp;:&nbsp;<span class="constructor">BarnesHut</span>.body&nbsp;list&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">BarnesHut</span>.bounds<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;bounds_size_squared&nbsp;:&nbsp;<span class="constructor">BarnesHut</span>.bounds&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;float<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;mass_trees&nbsp;:&nbsp;<span class="constructor">BarnesHut</span>.tree&nbsp;array&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;float<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;mass_barycenter&nbsp;:&nbsp;<span class="constructor">BarnesHut</span>.tree&nbsp;array&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;float&nbsp;*&nbsp;<span class="constructor">Vec2</span>.t<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;tree_of_bodies&nbsp;:&nbsp;<span class="constructor">BarnesHut</span>.body&nbsp;list&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">BarnesHut</span>.tree<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;tree_of_bodies_array&nbsp;:&nbsp;<span class="constructor">BarnesHut</span>.body&nbsp;array&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">BarnesHut</span>.tree<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;fold&nbsp;:&nbsp;(<span class="keywordsign">'</span>a&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">BarnesHut</span>.tree&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="keywordsign">'</span>a)&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="keywordsign">'</span>a&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">BarnesHut</span>.tree&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="keywordsign">'</span>a<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;contains&nbsp;:&nbsp;<span class="constructor">BarnesHut</span>.body&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">BarnesHut</span>.tree&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;bool<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;do_add_force_on&nbsp;:&nbsp;<span class="constructor">Vec2</span>.t&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Vec2</span>.t&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">Vec2</span>.t&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;float&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;do_calc_force&nbsp;:&nbsp;<span class="constructor">Vec2</span>.t&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">BarnesHut</span>.body&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">BarnesHut</span>.tree&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+&nbsp;&nbsp;<span class="keyword">val</span>&nbsp;do_calc_forces&nbsp;:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="constructor">Vec2</span>.t&nbsp;array&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">BarnesHut</span>.body&nbsp;array&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;<span class="constructor">BarnesHut</span>.tree&nbsp;<span class="keywordsign">-&gt;</span>&nbsp;unit<br>
+<span class="keyword">end</span></code></body></html>

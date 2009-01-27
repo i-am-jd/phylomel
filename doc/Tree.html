@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=iso-8859-1" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="previous" href="Dendogram.html">
+<link rel="next" href="Clustering.html">
+<link rel="Up" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of exceptions" rel=Appendix href="index_exceptions.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="DistMat" rel="Chapter" href="DistMat.html">
+<link title="Genotype" rel="Chapter" href="Genotype.html">
+<link title="Genotypes" rel="Chapter" href="Genotypes.html">
+<link title="GenoMat" rel="Chapter" href="GenoMat.html">
+<link title="DynMat" rel="Chapter" href="DynMat.html">
+<link title="Dendogram" rel="Chapter" href="Dendogram.html">
+<link title="Tree" rel="Chapter" href="Tree.html">
+<link title="Clustering" rel="Chapter" href="Clustering.html">
+<link title="BarnesHut" rel="Chapter" href="BarnesHut.html"><title>Tree</title>
+</head>
+<body>
+<div class="navbar"><a href="Dendogram.html">Previous</a>
+&nbsp;<a href="index.html">Up</a>
+&nbsp;<a href="Clustering.html">Next</a>
+</div>
+<center><h1>Module <a href="type_Tree.html">Tree</a></h1></center>
+<br>
+<pre><span class="keyword">module</span> Tree: <code class="code">sig</code> <a href="Tree.html">..</a> <code class="code">end</code></pre>Handles phylogenetic minimum spanning trees<br>
+<hr width="100%">
+<br>
+Handles phylogenetic minimum spanning trees<br>
+<br><code><span class="keyword">type</span> <a name="TYPEt"></a><code class="type"></code>t = {</code><table class="typetable">
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code>adj_mat&nbsp;: <code class="type">bool <a href="DistMat.html#TYPEt">DistMat.t</a></code>;</code></td>
+<td class="typefieldcomment" align="left" valign="top" ><code>(*</code></td><td class="typefieldcomment" align="left" valign="top" >Adjacency matrix</td><td class="typefieldcomment" align="left" valign="bottom" ><code>*)</code></td>
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code>dist_mat&nbsp;: <code class="type">int <a href="DistMat.html#TYPEt">DistMat.t</a></code>;</code></td>
+<td class="typefieldcomment" align="left" valign="top" ><code>(*</code></td><td class="typefieldcomment" align="left" valign="top" >Distance matrix</td><td class="typefieldcomment" align="left" valign="bottom" ><code>*)</code></td>
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code>children&nbsp;: <code class="type">int list array</code>;</code></td>
+<td class="typefieldcomment" align="left" valign="top" ><code>(*</code></td><td class="typefieldcomment" align="left" valign="top" >Children list</td><td class="typefieldcomment" align="left" valign="bottom" ><code>*)</code></td>
+</tr>
+<tr>
+<td align="left" valign="top" >
+<code>&nbsp;&nbsp;</code></td>
+<td align="left" valign="top" >
+<code>parents&nbsp;: <code class="type">int array</code>;</code></td>
+<td class="typefieldcomment" align="left" valign="top" ><code>(*</code></td><td class="typefieldcomment" align="left" valign="top" >Parents list</td><td class="typefieldcomment" align="left" valign="bottom" ><code>*)</code></td>
+</tr></table>
+}
+
+
+<pre><span class="keyword">val</span> <a name="VALcreate"></a>create : <code class="type">bool <a href="DistMat.html#TYPEt">DistMat.t</a> -> int <a href="DistMat.html#TYPEt">DistMat.t</a> -> <a href="Tree.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">create adj_mat dist_mat</code><br>
+<b>Returns</b> a new tree<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALsize"></a>size : <code class="type"><a href="Tree.html#TYPEt">t</a> -> int</code></pre><div class="info">
+<code class="code">size t</code><br>
+<b>Returns</b> the number of egdes in the tree<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALleaves_nb"></a>leaves_nb : <code class="type"><a href="Tree.html#TYPEt">t</a> -> int array</code></pre><div class="info">
+<code class="code">leaves_nb t</code><br>
+<b>Returns</b> an array where the ith element is the number
+    of leaves in the subtree where the ith vertex is the root<br>
+</div>
+<pre><span class="keyword">val</span> <a name="VALprim_complete"></a>prim_complete : <code class="type">int -> int <a href="DistMat.html#TYPEt">DistMat.t</a> -> <a href="Tree.html#TYPEt">t</a></code></pre><div class="info">
+Prim's algorithm finds a minimum spanning tree, here from a complete graph
+	given a distance matrix<br>
+</div>
+</body></html>
