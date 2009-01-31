@@ -21,8 +21,6 @@ type state = {
 	mutable dy : float;
 	mutable elapsed_time : int;
 	mutable last_time    : int;
-	spring_factor : float;
-	repulse_factor : float;
 	bs : BarnesHut.body array;
 	fs : Vec2.t array;
 	fig : Phylogram.tree_figure;
@@ -179,33 +177,20 @@ let rec loop state =
 				()
 	in loop' InPause
 
-let readArgs () =
-	let file = ref "data/geno" in
-	let spring_factor = ref 30. in
-	let repulse_factor = ref 1. in
-	let set_spring_factor x = spring_factor := x in
-	let set_repulse_factor x = repulse_factor := x in
+let read_args () =
+	let file = ref "../data/geno" in
+	let set_spring = ForceDirectedLayout.set_spring_const in
+	let set_repulse = ForceDirectedLayout.set_repulse_const in
+	let set_drag = ForceDirectedLayout.set_drag_const in
 	let set_file f = file := f in
 	let speclist =
-		[("-s", Arg.Float set_spring_factor,  "spring factor (default 30)");
-		 ("-r", Arg.Float set_repulse_factor, "repulse factor (default 1)")] in
-	let usage_msg = "usage : genoballs -s [spring factor] [file]" in
+		[("-s", Arg.Float set_spring, "spring constant (default 1)");
+		 ("-r", Arg.Float set_repulse, "repulse constant (default 1)");
+		 ("-d", Arg.Float set_drag, "drag constant (default 4)")] in
+	let usage_msg =
+		"usage : phylog -s spring -d drag -r repulse [file]" in
 	Arg.parse speclist set_file usage_msg;
-	!file, !spring_factor, !repulse_factor
-
-(* let read_args () = *)
-(* 	let file = ref "data/geno" in *)
-(* 	let spring_factor = ref 30. in *)
-(* 	let repulse_factor = ref 1. in *)
-(* 	let setSpringFactor x = spring_factor := x in *)
-(* 	let setRepulseFactor x = repulse_factor := x in *)
-(* 	let setFile f = file := f in *)
-(* 	let speclist = *)
-(* 		[("-s", Arg.Float setSpringFactor,  "spring factor (default 30)"); *)
-(* 		 ("-r", Arg.Float setRepulseFactor, "repulse factor (default 1)")] in *)
-(* 	let usage_msg = "usage : genoballs -s [spring factor] [file]" in *)
-(* 	Arg.parse speclist setFile usage_msg; *)
-(* 	!file, !spring_factor, !repulse_factor *)
+	!file
 
 let main () =
 	init [VIDEO];
@@ -216,8 +201,8 @@ let main () =
 	(*show_cursor false;*)
 	SDLGL.swap_buffers ();
 
-	let file, spring_factor, repulse_factor = readArgs () in
-	let genos = Genotypes.read_file file in
+	let file = read_args () in
+	let genos = Genotypes.remove_duplicates (Genotypes.read_file file) in
 	let dist_mat = GenoMat.create genos in
 	let tree = Tree.prim_complete genos.geno_size dist_mat in
 	let fig = Phylogram.radial_layout 800. tree in
@@ -236,18 +221,11 @@ let main () =
 		dy = 0.;
 		elapsed_time = 0;
 		last_time   = Timer.get_ticks();
-		spring_factor = 30.;
-		repulse_factor = 1.;
 		bs = bs;
 		fs = fs;
 		fig = fig;
 		n = n;
 	} in
-
-	(* for i=0 to 100 do *)
-	(* 	update_state_start state; *)
-	(* 	redraw_state state *)
-	(* done; *)
 
 	loop state;
 	quit ()
