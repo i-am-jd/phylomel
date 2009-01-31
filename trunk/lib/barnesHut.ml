@@ -227,11 +227,11 @@ let do_add_force_on f p p' m' =
 	let r = sqrt (square dx +. square dy) in
 	let r3 = r *. r *. r in
 	let factor = k *. m *. m' in
-	f.x <- f.x +. (factor *. dx /. (r3 +. 0.01));
-	f.y <- f.y +. (factor *. dy /. (r3 +. 0.01))
+	f.x <- f.x -. (factor *. dx /. (r3 +. 0.1));
+	f.y <- f.y -. (factor *. dy /. (r3 +. 0.1))
 
 let dist2 v1 v2 =
-	square (v2.x -. v1.x) +. square (v2.y -. v1.y)
+	sqrt (square (v2.x -. v1.x) +. square (v2.y -. v1.y))
 
 let do_calc_force f b tree =
 	let rec calc_force' = function

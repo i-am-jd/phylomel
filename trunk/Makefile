@@ -5,7 +5,7 @@ all: lib bin
 lib:
 	@cd lib && $(MAKE)
 
-.PHONY: lib
+.PHONY: bin
 bin: lib
 	@cd bin && $(MAKE)
 
@@ -21,7 +21,12 @@ uninstall:
 clean:
 	@cd lib && $(MAKE) clean
 	@cd bin && $(MAKE) clean
+	@cd gltest && $(MAKE) clean
 
 .PHONY: doc
 doc: all
 	@cd lib && $(MAKE) htdoc
+
+.PHONY: gltest
+gltest: lib
+	@cd gltest && $(MAKE)
