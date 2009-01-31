@@ -219,8 +219,7 @@ let rec contains b t =
   List.for_all (fun b -> contains b t) bs;;
 *)
 
-let do_add_force_on f p p' m' =
-	let k = 1. in
+let do_add_force_on f k p p' m' =
 	let m = 1. in
 	let dx = p'.x -. p.x in
 	let dy = p'.y -. p.y in
@@ -233,21 +232,21 @@ let do_add_force_on f p p' m' =
 let dist2 v1 v2 =
 	sqrt (square (v2.x -. v1.x) +. square (v2.y -. v1.y))
 
-let do_calc_force f b tree =
+let do_calc_force f k b tree =
 	let rec calc_force' = function
 		| Body b' ->
 			  if b <> b' then
-				  do_add_force_on f b.p b'.p 1.
+				  do_add_force_on f k b.p b'.p 1.
 		| Cell c ->
 			  let r2 = dist2 b.p c.center in
 			  if c.sq_size /. r2 < theta2 then
-				  do_add_force_on f b.p c.center c.mass
+				  do_add_force_on f k b.p c.center c.mass
 			  else
 				  Array.iter calc_force' c.sub_ts
 		| Empty -> () in
 	calc_force' tree
 			  
-let do_calc_forces fs bs tree =
+let do_calc_forces fs k bs tree =
 	for i=0 to Array.length fs - 1 do
-		do_calc_force fs.(i) bs.(i) tree
+		do_calc_force fs.(i) k bs.(i) tree
 	done

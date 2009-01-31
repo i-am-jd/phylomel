@@ -87,9 +87,9 @@ val fold : ('a -> tree -> 'a) -> 'a -> tree -> 'a
 (** [contains b t] returns [true] if [t] contains [b]. *)
 val contains : body -> tree -> bool
 
-val do_add_force_on : Vec2.t -> Vec2.t -> Vec2.t -> float -> unit
+val do_add_force_on : Vec2.t -> float -> Vec2.t -> Vec2.t -> float -> unit
 
-val do_calc_force : Vec2.t -> body -> tree -> unit
+val do_calc_force : Vec2.t -> float ->body -> tree -> unit
 
-val do_calc_forces : Vec2.t array -> body array -> tree -> unit
+val do_calc_forces : Vec2.t array -> float -> body array -> tree -> unit
 
