@@ -26,6 +26,7 @@ SOURCES = \
 
 LIB_PACK_NAME = phylomel
 OCAMLFLAGS = -for-pack Phylomel -dtypes -unsafe
+OCAMLNCFLAGS = -inline 1000
 PACKS = extlib
 RESULT = phylomel
 

@@ -9,7 +9,9 @@ PACKS = extlib
 INCDIRS = ../lib
 LIBS = unix bigarray phylomel
 
-OCAMLFLAGS="-unsafe"
+OCAMLFLAGS= -unsafe
+OCAMLNCFLAGS= -inline 1000
+
 
 SOURCE=utils.ml
 SDL_SOURCE=$(LIBDIR)/sdl_stub.c $(LIBDIR)/sdl.mli $(LIBDIR)/sdl.ml
@@ -27,4 +29,7 @@ SRC=$(SRCDIR)/$(MLFILE).ml
 CC=gcc
 SOURCES=$(WIN_SOURCE) $(SDL_SOURCE) $(GL_SOURCE) $(SOURCE) $(SRC)
 RESULT=$(BINDIR)/$(MLFILE)
--include OCamlMakefile
+
+all: native-code
+
+-include ../OCamlMakefile
