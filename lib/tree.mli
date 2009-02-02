@@ -19,6 +19,6 @@ val size : t -> int
     of leaves in the subtree where the ith vertex is the root *)
 val leaves_nb : t -> int array
 
-(** Prim's algorithm finds a minimum spanning tree, here from a complete graph
+(** Prim's algorithm finds a minimum spanning tree on a genotypes collection,
 	given a distance matrix *)
-val prim_complete : int -> int DistMat.t -> t
+val prim_complete : Genotypes.t -> int DistMat.t -> t

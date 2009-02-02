@@ -1,7 +1,5 @@
 open Phylomel
 open Printf
-open Genotypes
-open Phylogram
 
 let () =
 	if (Array.length Sys.argv) < 3 then
@@ -18,8 +16,8 @@ let () =
 
 		let collec = Genotypes.read_file geno_file in
 		let dmat = GenoMat.create collec in
-		let tree = Tree.prim_complete collec.geno_size dmat in
-		let fig = Phylogram.radial_layout 800. tree in
+		let tree = Tree.prim_complete collec dmat in
+		let fig = Phylogram.radial_layout ~reframe:true 800. tree in
 
 		Phylogram.write_svg_file fig svg_file
 

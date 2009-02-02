@@ -1,3 +1,5 @@
+open Genotypes
+
 type t = {
 	adj_mat : bool DistMat.t;
 	dist_mat : int DistMat.t;
@@ -111,6 +113,6 @@ let prim_complete_adj_mat max (m: int array array) =
 
 	tree
 
-let prim_complete max dist_mat =
-	let adj_mat = prim_complete_adj_mat max dist_mat in
+let prim_complete genocoll dist_mat =
+	let adj_mat = prim_complete_adj_mat genocoll.geno_size dist_mat in
 	create adj_mat dist_mat
