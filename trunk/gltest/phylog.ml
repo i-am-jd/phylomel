@@ -1,20 +1,22 @@
+(* GlCaml *)
 open Sdl
 open Video
 open Event
 open Glcaml
 open Printf
 
+(* Miscellaneous openGL functions *)
 open Utils
 
+(*Phylomel, trees, phylograms and bodies *)
 open Phylomel
-open Genotypes
-
 open Tree
 open Phylogram
 open BarnesHut
 
 open Vec2
 
+(* Main program state *)
 type state = {
 	mutable height : float;
 	mutable dx : float;
@@ -27,6 +29,8 @@ type state = {
 	n : int;
 }
 
+(* Main loop state and events *)
+
 type loop_state = Continue | InPause
 type event = Pause | Up | Down | Move of float * float | QuitE | Else
 
@@ -36,6 +40,8 @@ let (-|) = Vec2.sub
 let switch_loop_state = function
 	| Continue -> InPause
 	| InPause -> Continue
+
+(* Drawing functions *)
 
 let draw_bodies state =
 	for i=0 to state.n - 1 do
@@ -51,7 +57,7 @@ let draw_springs state =
 		draw_line p p'
 	done
 
-(* The main drawing function. *)
+(* Main drawing function. *)
 let draw_state state =
 	glClear (gl_color_buffer_bit lor gl_depth_buffer_bit); 
 	glLoadIdentity ();
@@ -64,53 +70,25 @@ let draw_state state =
 	BarnesHut.drawTree tree;
 	BarnesHut.drawArea area*)
 
+(* Draws the state and swaps the buffers *)
 let redraw_state state =
 	draw_state state;
 	SDLGL.swap_buffers ()
 
-(*
-let averageSpeed ps =
-	let v = ref 0. in
-	let n = Array.length ps in
-	for i=0 to n - 1 do
-		let p = Array.unsafe_get ps i in
-		v := !v +. Vec2.norm p.v
-	done;
-	!v /. float_of_int(n)
-
-let eq = ref false*)
-
-let update_state_start state =
-	let delta = 0.5 in (*0.005*)
-	let time = Timer.get_ticks () in
-	let real_delta = time - state.last_time in
-	if real_delta > 0 then ( (*5*)
-		state.last_time <- time;
-		state.elapsed_time <- state.elapsed_time + 5;
-		ForceDirectedLayout.do_calc_forces_n2 state.fs state.bs state.fig;
-		for i=0 to state.n - 1 do
-			let b = state.bs.(i) in
-			let f = state.fs.(i) in
-			b.p.x <-
-				b.p.x +. delta *. b.v.x +. 1./.2. *. delta *. delta *. f.x;
-			b.p.y <-
-				b.p.y +. delta *. b.v.y +. 1./.2. *. delta *. delta *. f.y;
-			b.v.x <- b.v.x +. delta *. f.x;
-			b.v.y <- b.v.y +. delta *. f.y;
-			f.x <- 0.;
-			f.y <- 0.
-		done
-	)
-
 let update_state state =
-	let delta = 0.05 in (*0.005*)
+	let delta = 0.05 in (*previous value : 0.005*)
 	let time = Timer.get_ticks () in
 	let real_delta = time - state.last_time in
-	if real_delta > 0 then ( (*5*)
+
+	(* Time to update values *)
+	if real_delta > 0 then (
 		state.last_time <- time;
 		state.elapsed_time <- state.elapsed_time + 5;
-	(* ForceDirectedLayout.do_calc_forces state.fs state.bs state.fig; *)
+
+		(* Update forces *)
 		ForceDirectedLayout.do_calc_forces state.fs state.bs state.fig;
+
+		(* Euler integration on each body *)
 		for i=0 to state.n - 1 do
 			let b = state.bs.(i) in
 			let f = state.fs.(i) in
@@ -124,13 +102,6 @@ let update_state state =
 			f.y <- 0.
 		done
 	)
-	
-	(*let average = averageSpeed state.ps in
-	if (state.elapsed_time > 100) && (not !eq) && (average < 0.05) then (
-		printf "equilibrium at %d\n" (state.elapsed_time/5);
-		(*exit 0;*)
-		eq := true
-	)*)
 
 let get_event () =
 	match poll_event () with
@@ -149,8 +120,7 @@ let get_event () =
 		| Quit -> QuitE
 		| _ -> Else
 
-let rec loop state =
-	redraw_state state;
+let loop state =
 	let rec loop' last_loop_state =
 		(match last_loop_state with
 			| Continue ->
@@ -193,40 +163,46 @@ let read_args () =
 	!file
 
 let main () =
+	
+	(* Reads the genotypes file
+	   Removes duplicates
+	   Creates :
+	     - a genetic distance matrix
+	     - a minimum spanning tree
+	     - a phylogram (graphical tree) *)
+
+	let file = read_args () in
+	let genos = Genotypes.remove_duplicates (Genotypes.read_file file) in
+	let dist_mat = GenoMat.create genos in
+	let tree = Tree.prim_complete genos dist_mat in
+	let fig = Phylogram.radial_layout ~reframe:false 800. tree in
+
+	(* OpenGL initialization *)
 	init [VIDEO];
 	let w = 1280 and h = 1024 and bpp = 32 in
 	let _ = set_video_mode w h bpp [OPENGL;HWSURFACE;DOUBLEBUF;HWACCEL] in
 	Window.set_caption "Phylogram" "Phylogram";
 	init_gl w h;
-	(*show_cursor false;*)
 	SDLGL.swap_buffers ();
 
-	let file = read_args () in
-	let genos = Genotypes.remove_duplicates (Genotypes.read_file file) in
-	let dist_mat = GenoMat.create genos in
-	let tree = Tree.prim_complete genos.geno_size dist_mat in
-	let fig = Phylogram.radial_layout 800. tree in
-
+	(* Program state initialization *)
 	let n = Phylogram.size fig in
 	let fs = Array.init n (fun _ -> Vec2.null ()) in
 	let bs = Array.map ForceDirectedLayout.body_of_pos fig.ps in
-
-	(*experimental*)
-	(*Array.iter (fun b -> b.v.x <- rand_float 5.;
-					     b.v.y <- rand_float 5.) bs;*)
 
 	let state = {
 		height = -35.60;
 		dx = 0.;
 		dy = 0.;
 		elapsed_time = 0;
-		last_time   = Timer.get_ticks();
+		last_time = Timer.get_ticks();
 		bs = bs;
 		fs = fs;
 		fig = fig;
 		n = n;
 	} in
 
+	redraw_state state;
 	loop state;
 	quit ()
 
@@ -244,3 +220,14 @@ let _ =
 	printf "bottom left corner : %f,%f\n" x y;*)
 
 	(*let xs = Phylogram.crop 800. 600. xs in*)
+
+(* halt criterion : average < 0.05
+
+let average_speed ps =
+	let v = ref 0. in
+	let n = Array.length ps in
+	for i=0 to n - 1 do
+		let p = Array.unsafe_get ps i in
+		v := !v +. Vec2.norm p.v
+	done;
+	!v /. float_of_int(n) *)

@@ -87,7 +87,7 @@ let create_figure points w h tree =
 	  h = h;
 	  tree = tree }
 
-let radial_layout ?(margin= (10.,10.)) width tree =
+let radial_layout ?(margin= (10.,10.)) ?(reframe = false) width tree =
 	let n = Tree.size tree in
 	let foi = float_of_int in
 
@@ -127,12 +127,12 @@ let radial_layout ?(margin= (10.,10.)) width tree =
 
 	iter 0 0;
 
-	(* Reframe *)
-	
 	let x0,y0 = margin in
-
-	(* unsafe_reframe margin xs;
-	unsafe_crop_width (w-.2.*.x0) xs;*)
+	
+	if reframe then (
+		unsafe_reframe margin xs;
+		unsafe_crop_width (width-.2.*.x0) xs;
+	);
 	
 	let height = height xs +. 2. *. y0 in
 	create_figure xs width height tree
