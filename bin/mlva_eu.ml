@@ -149,7 +149,11 @@ let () =
 	      let svg_file = name ^ ".svg" in
 
 		  let width, height = fig.Phylogram.w, fig.Phylogram.h in
-		  Phylogram.write_svg_file coll fig svg_file;
+		  Phylogram.write_svg_file
+			  ~links_info:(Some (links, args.target))
+			  coll
+			  fig
+			  svg_file;
 	      
 		  write_html
 			  ((sprintf "mst-%s.svg" args.id_session))

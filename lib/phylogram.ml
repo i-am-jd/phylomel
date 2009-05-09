@@ -244,9 +244,9 @@ let write_svg ?(links_info = None) collec fig out =
 
 	Svg.close out
 	
-let write_svg_file collec fig file =
+let write_svg_file ?(links_info = None) collec fig file =
 	let out = IO.output_channel (open_out file) in
-	write_svg collec fig out
+	write_svg ~links_info:links_info collec fig out
 
 
 (*let test =
