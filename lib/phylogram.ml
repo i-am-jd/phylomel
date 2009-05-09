@@ -106,7 +106,7 @@ let radial_layout ?(margin= (10.,10.)) ?(reframe = false) width tree =
 	let rec iter p i =
 
 		if i <> 0 then (
-			let d = DistMat.get tree.Tree.dist_mat i p in
+			let d = DistMat.get tree.Tree.dist_mat i p + 1 in
 			let angle = bs.(i) +. ws.(i) /. 2. in
 			(*let dx = foi(d) *| unit_vec angle in
 			let x' = xs.(p) +| dx in*)
@@ -170,10 +170,10 @@ let put_points out ?(links_info = None) fig genos =
 	let printPoint i {x=x; y=y} =
 
 		Svg.circle out
-			~fill:"lightsteelblue"
-			~stroke:"midnightblue"
+			~fill:"white" (*"midnightblue"*)
+			~stroke:"white" (*"midnightblue"*)
 			~width:1.
-			6. (x, y);
+			8. (x, y);
 
 		begin
 		match links_info with
