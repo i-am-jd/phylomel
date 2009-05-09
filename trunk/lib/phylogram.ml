@@ -216,9 +216,9 @@ let put_lines out fig =
 			let p = tree.parents.(i) in
 			let d = DistMat.get tree.dist_mat p i in
 			if d < 3 then (
-				let color = if d=1 then "black" else "grey" in
+				let color = "black" in
 				Svg.line out
-					~width:1.
+					~width:(if d=1 then 2. else 1.)
 					(m.x, m.y)
 					(ps.(p).x, ps.(p).y)
 			) else (
