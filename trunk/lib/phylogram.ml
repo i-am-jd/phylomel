@@ -169,29 +169,35 @@ let crop w' h' xs =
 let put_points out ?(links_info = None) fig genos =
 	let printPoint i {x=x; y=y} =
 
+		Svg.circle out
+			~fill:"white" (*"lightsteelblue"*)
+			~stroke:"white" (*"midnightblue"*)
+			~width:1.
+			6. (x, y);
+
+		begin
 		match links_info with
 			| None ->
 				  Svg.text out
 					  ~anchor:"middle"
+					  ~weight:"bold"
 					  (Genotype.description genos.(i))
-					  (x, y+.4.);
+					  (x, y+.4.)
 			| Some(links,target) ->
 				  let link = links.(i) in
 				  Svg.link out
 					  ~anchor:"middle"
+					  ~weight:"bold"
 					  ~link:link
 					  ~target:target
 					  (Genotype.description genos.(i))
 					  (x, y+.4.)
-
+		 end;
+		  
 		(*Svg.put out
 			"<a xlink:href=\"http://www.w3schools.com\" target=\"\">";
 		*)
-		(*Svg.circle out
-			~fill:"lightsteelblue"
-			~stroke:"midnightblue"
-			~width:1.
-			4. (x, y);*)
+		
 		(* Svg.put out "</a>\n"; *)
 
 		(*Svg.text out
@@ -212,7 +218,7 @@ let put_lines out fig =
 			if d < 3 then (
 				let w = if d=1 then 2. else 1. in
 				Svg.line out
-					~width:w
+					~width:1.
 					(m.x, m.y)
 					(ps.(p).x, ps.(p).y)
 			) else (
