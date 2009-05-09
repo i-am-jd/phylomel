@@ -168,6 +168,8 @@ let crop w' h' xs =
 
 let put_points out fig genos =
 	let printPoint i {x=x; y=y} =
+		Svg.put out
+			"<a xlink:href=\"http://www.w3schools.com\" target=\"\">";
 		Svg.circle out
 			~fill:"lightsteelblue"
 			~stroke:"midnightblue"
@@ -176,7 +178,8 @@ let put_points out fig genos =
 		Svg.text out
 			~anchor:"middle"
 			(Genotype.description genos.(i))
-			(x,y)
+			(x, y+.4.);
+		Svg.put out "</a>\n";
 	in Array.iteri printPoint fig.ps
 
 let put_lines out fig =
