@@ -170,8 +170,8 @@ let put_points out ?(links_info = None) fig genos =
 	let printPoint i {x=x; y=y} =
 
 		Svg.circle out
-			~fill:"white" (*"lightsteelblue"*)
-			~stroke:"white" (*"midnightblue"*)
+			~fill:"lightsteelblue"
+			~stroke:"midnightblue"
 			~width:1.
 			6. (x, y);
 
