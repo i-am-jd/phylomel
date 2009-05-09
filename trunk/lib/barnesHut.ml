@@ -226,8 +226,8 @@ let do_add_force_on f k p p' m' =
 	let r = sqrt (square dx +. square dy) in
 	let r3 = r *. r *. r in
 	let factor = k *. m *. m' in
-	f.x <- f.x -. (factor *. dx /. (r3 +. 0.1));
-	f.y <- f.y -. (factor *. dy /. (r3 +. 0.1))
+	f.x <- f.x -. (factor *. dx /. (r3 +. 0.3));
+	f.y <- f.y -. (factor *. dy /. (r3 +. 0.3))
 
 let dist2 v1 v2 =
 	sqrt (square (v2.x -. v1.x) +. square (v2.y -. v1.y))

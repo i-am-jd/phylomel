@@ -9,9 +9,10 @@ PACKS = extlib
 INCDIRS = ../lib
 LIBS = unix bigarray phylomel
 
-OCAMLFLAGS= -unsafe
-OCAMLNCFLAGS= -inline 1000
+OCAMLFLAGS=
+OCAMLNCFLAGS= -unsafe -noassert -inline 1000 -ccopt -O9
 
+#-ccopt -O9
 
 SOURCE=utils.ml
 SDL_SOURCE=$(LIBDIR)/sdl_stub.c $(LIBDIR)/sdl.mli $(LIBDIR)/sdl.ml

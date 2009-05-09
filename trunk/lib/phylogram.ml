@@ -4,8 +4,8 @@ open Tree
 
 type tree_figure = {
 	ps : Vec2.t array; (* points *)
-	w : float; (* width  *)
-	h : float; (* height *)
+	mutable w : float; (* width  *)
+	mutable h : float; (* height *)
 	tree : Tree.t
 }
 
@@ -178,7 +178,7 @@ let put_points out fig =
 			~fill:"lightsteelblue"
 			~stroke:"midnightblue"
 			~width:1.
-			3. (x, y) in
+			4. (x, y) in
 	Array.iter printPoint fig.ps
 
 let put_lines out fig =

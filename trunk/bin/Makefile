@@ -13,7 +13,15 @@ upgma2svg:
 phylog:
 	$(MAKE) -f makefile.inc MLFILE=phylog
 
+phylogf:
+	$(MAKE) -f makefile.inc MLFILE=phylogf
+
+mlva_eu:
+	$(MAKE) -f makefile.inc MLFILE=mlva_eu
+
 clean:
 	$(MAKE) -f makefile.inc MLFILE=upgma2svg clean	
 	$(MAKE) -f makefile.inc MLFILE=simpson clean
 	$(MAKE) -f makefile.inc MLFILE=phylog clean
+	$(MAKE) -f makefile.inc MLFILE=phylogf clean
+	$(MAKE) -f makefile.inc MLFILE=mlva_eu clean

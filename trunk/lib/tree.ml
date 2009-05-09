@@ -70,9 +70,9 @@ let prim_complete_adj_mat max (m: int array array) =
 	let tree = DistMat.create n false in
 	let in_tree = Array.create n false in
 
-	(* i is not in the tree
-	   close.(i) is the closest node to i in the tree
-	   dist.(i)  is the distance between the two *)
+	(* When the ith vertex is not in the tree :
+	    - close.(i) is the closest node to i in the tree
+	    - dist.(i)  is the distance between the two *)
 	let close = Array.create n 0 in
 	let dist = Array.create n (max+1) in
 
