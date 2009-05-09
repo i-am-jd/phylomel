@@ -13,7 +13,7 @@
 (** The tree itself is defined as an algebraic datatype *)
 
 type leaf = {
-	value : int;         (** Each leaf maps the genotype of index value *)
+	geno : int;          (** Each leaf maps the genotype of index value *)
 	mutable index : int; (** Position of the genotype in the dendogram  *)
 }
 

@@ -8,7 +8,7 @@ open ExtLib
 open Printf
 
 type leaf = {
-	value : int;         (** Each leaf maps the genotype of index value *)
+	geno : int;          (** Each leaf maps the genotype of index geno *)
 	mutable index : int; (** Position of the genotype in the dendogram  *)
 }
 
@@ -53,8 +53,8 @@ let homology diff geno_size =
 	let size = float_of_int geno_size in
 	(size -. diff) /. size *. 100.0
 
-let mk_leaf value =
-	let l = { value = value; index = 0; } in
+let mk_leaf geno =
+	let l = { geno = geno; index = 0; } in
 	Leaf(l)
 	
 let mk_node t1 t2 homology =
@@ -98,14 +98,14 @@ type links = string array * string
    Links are written if provided *)
 let write_svg_leaves out ?(links_info = None) ddg trans =
     let write_leaf leaf =
- 		let geno = ddg.coll.genos.(leaf.value) in
+ 		let geno = ddg.coll.genos.(leaf.geno) in
 		let pos = trans (101., (float_of_int leaf.index)) in
 		let infos = Genotype.description geno in
 		match links_info with
 			| None ->
 				  Svg.text out infos pos
 			| Some(links,target) ->
-				  let link = links.(leaf.value) in
+				  let link = links.(leaf.geno) in
 				  Svg.link out infos ~link:link ~target:target pos
     in List.iter write_leaf ddg.leaves
 
@@ -180,7 +180,7 @@ let write_svg out ?(links_info = None) ddg =
 
     (*OTHERS*)
     
-	(* Litte legend marks (how am I supposed to call them ?)*)
+	(* Little legend marks (how am I supposed to call them ?)*)
     for i=0 to 20 do
 		let x = float_of_int (i*5) in
 		let id = sprintf "LegendLine%d" i in
