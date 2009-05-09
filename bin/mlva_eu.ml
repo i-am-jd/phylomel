@@ -1,4 +1,10 @@
 open Phylomel
+
+open Phylogram
+open Vec2
+open BarnesHut
+open Phylogram
+
 open Printf
 
 type args = {
@@ -51,8 +57,25 @@ Syntax
 	test -m [upgma/mst] -f [svg/png] -i [input] -id [id_session] -table [table] -link_file [file] -field [link_field]
 	(7 parameters) *)
 
-let matrix_to_float matrix =
-    Array.map (Array.map float_of_int) matrix
+let update_state n fs bs fig =
+	let delta = 0.05 in
+
+	(* Update forces *)
+	ForceDirectedLayout.do_calc_forces fs bs fig;
+	
+	(* Euler integration on each body *)
+	for i=0 to n - 1 do
+		let b = bs.(i) in
+		let f = fs.(i) in
+		b.p.x <-
+			b.p.x +. delta *. b.v.x +. 1./.2. *. delta *. delta *. f.x;
+		b.p.y <-
+			b.p.y +. delta *. b.v.y +. 1./.2. *. delta *. delta *. f.y;
+		b.v.x <- b.v.x +. delta *. f.x;
+		b.v.y <- b.v.y +. delta *. f.y;
+		f.x <- 0.;
+		f.y <- 0.
+	done
 
 let get_links args coll =
 	let get_link genotype = 
@@ -99,13 +122,28 @@ let () =
 			  (width, height)
 		  
 	| "mst-phylogram" ->
-		  let coll = Genotypes.read_file args.input in
+		  let coll = Genotypes.remove_duplicates
+			  (Genotypes.read_file args.input) in
 		  printf "%d genotypes read (size = %d)\n"
 			  coll.Genotypes.size coll.Genotypes.geno_size;
 		  let dmat = GenoMat.create coll in
 		  let tree = Tree.prim_complete coll dmat in
 		  let fig = Phylogram.radial_layout ~reframe:true 800. tree in
 		   
+	      (* Creates force array, bodies *)
+		  let n = Phylogram.size fig in
+		  let fs = Array.init n (fun _ -> Vec2.null ()) in
+		  let bs = Array.map ForceDirectedLayout.body_of_pos fig.ps in
+
+		  for i=0 to 200 do
+		      update_state n fs bs fig
+		  done;
+
+		  let x0, y0 = (10.,10.) in
+		  unsafe_reframe (10.,10.) fig.ps;
+		  unsafe_crop_width (800.-.2.*.x0) fig.ps;
+		  fig.h <- height fig.ps;
+
 	      (*let links = get_links args coll in*)
 	      let name = sprintf "%smst-%s" args.dir args.id_session in
 	      let svg_file = name ^ ".svg" in
