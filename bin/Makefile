@@ -2,7 +2,7 @@
 
 MAKE=make
 
-all: upgma2svg phylog
+all: upgma2svg phylog phylogf mlva_eu
 
 simpson:
 	$(MAKE) -f makefile.inc MLFILE=simpson

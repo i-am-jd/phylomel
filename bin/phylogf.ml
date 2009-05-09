@@ -50,7 +50,7 @@ let () =
 		let fs = Array.init n (fun _ -> Vec2.null ()) in
 		let bs = Array.map ForceDirectedLayout.body_of_pos fig.ps in
 
-		for i=0 to 200 do
+		for i=0 to 2000 do
 			update_state n fs bs fig
 		done;
 
@@ -63,5 +63,5 @@ let () =
 		(* unsafe_reframe (10., 10.) fig.ps; *)
 		(* unsafe_crop_width (800.-.2.*.x0) fig.ps; *)
 		
-		Phylogram.write_svg_file fig svg_file
+		Phylogram.write_svg_file collec fig svg_file
 
