@@ -57,8 +57,12 @@ Syntax
 	test -m [upgma/mst] -f [svg/png] -i [input] -id [id_session] -table [table] -link_file [file] -field [link_field]
 	(7 parameters) *)
 
-let update_state n fs bs fig =
+let update_state n fs fs' bs fig =
 	let delta = 0.05 in
+
+	for i=0 to n-1 do
+		fs'.(i) <- fs.(i)
+	done;
 
 	(* Update forces *)
 	ForceDirectedLayout.do_calc_forces fs bs fig;
@@ -67,12 +71,13 @@ let update_state n fs bs fig =
 	for i=0 to n - 1 do
 		let b = bs.(i) in
 		let f = fs.(i) in
+		let f' = fs'.(i) in
 		b.p.x <-
 			b.p.x +. delta *. b.v.x +. 1./.2. *. delta *. delta *. f.x;
 		b.p.y <-
 			b.p.y +. delta *. b.v.y +. 1./.2. *. delta *. delta *. f.y;
-		b.v.x <- b.v.x +. delta *. f.x;
-		b.v.y <- b.v.y +. delta *. f.y;
+		b.v.x <- b.v.x +. delta *. ((f.x +. f'.x) /. 2.);
+		b.v.y <- b.v.y +. delta *. ((f.y +. f'.y) /. 2.);
 		f.x <- 0.;
 		f.y <- 0.
 	done
@@ -128,15 +133,16 @@ let () =
 			  coll.Genotypes.size coll.Genotypes.geno_size;
 		  let dmat = GenoMat.create coll in
 		  let tree = Tree.prim_complete coll dmat in
-		  let fig = Phylogram.radial_layout ~reframe:true 800. tree in
+		  let fig = Phylogram.radial_layout ~reframe:false 800. tree in
 		   
 	      (* Creates force array, bodies *)
 		  let n = Phylogram.size fig in
 		  let fs = Array.init n (fun _ -> Vec2.null ()) in
+          let fs' = Array.init n (fun _ -> Vec2.null ()) in
 		  let bs = Array.map ForceDirectedLayout.body_of_pos fig.ps in
 
 		  for i=0 to 200 do
-		      update_state n fs bs fig
+		      update_state n fs fs' bs fig
 		  done;
 
 		  let x0, y0 = (10.,10.) in

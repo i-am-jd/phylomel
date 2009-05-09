@@ -25,6 +25,7 @@ type state = {
 	mutable last_time    : int;
 	bs : BarnesHut.body array;
 	fs : Vec2.t array;
+	fs' : Vec2.t array;
 	fig : Phylogram.tree_figure;
 	n : int;
 }
@@ -92,12 +93,13 @@ let update_state state =
 		for i=0 to state.n - 1 do
 			let b = state.bs.(i) in
 			let f = state.fs.(i) in
+			let f' = state.fs'.(i) in
 			b.p.x <-
 				b.p.x +. delta *. b.v.x +. 1./.2. *. delta *. delta *. f.x;
 			b.p.y <-
 				b.p.y +. delta *. b.v.y +. 1./.2. *. delta *. delta *. f.y;
-			b.v.x <- b.v.x +. delta *. f.x;
-			b.v.y <- b.v.y +. delta *. f.y;
+			b.v.x <- b.v.x +. delta *.( (f.x +. f'.x) /. 2. );
+			b.v.y <- b.v.y +. delta *.( (f.y +. f'.y) /. 2. );
 			f.x <- 0.;
 			f.y <- 0.
 		done
@@ -188,6 +190,7 @@ let main () =
 	(* Program state initialization *)
 	let n = Phylogram.size fig in
 	let fs = Array.init n (fun _ -> Vec2.null ()) in
+	let fs' = Array.init n (fun _ -> Vec2.null ()) in
 	let bs = Array.map ForceDirectedLayout.body_of_pos fig.ps in
 
 	let state = {
@@ -198,6 +201,7 @@ let main () =
 		last_time = Timer.get_ticks();
 		bs = bs;
 		fs = fs;
+		fs' = fs';
 		fig = fig;
 		n = n;
 	} in
