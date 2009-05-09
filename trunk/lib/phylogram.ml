@@ -166,20 +166,18 @@ let crop w' h' xs =
 		crop_height h' xs
 *)
 
-let print_points ps =
-	Array.iter (fun {x=x; y=y} -> printf "%f,%f " x y) ps;
-	printf "\n"
-
-(*let writeLines fig parents dmat =*)
-
-let put_points out fig =
-	let printPoint {x=x; y=y} =
+let put_points out fig genos =
+	let printPoint i {x=x; y=y} =
 		Svg.circle out
 			~fill:"lightsteelblue"
 			~stroke:"midnightblue"
 			~width:1.
-			4. (x, y) in
-	Array.iter printPoint fig.ps
+			4. (x, y);
+		Svg.text out
+			~anchor:"middle"
+			(Genotype.description genos.(i))
+			(x,y)
+	in Array.iteri printPoint fig.ps
 
 let put_lines out fig =
 	let ps = fig.ps in
@@ -210,7 +208,7 @@ let put_lines out fig =
 
 	Array.iteri print_line ps
 
-let write_svg out fig =
+let write_svg collec fig out =
 	(*let x0, y0 = margin in
 	let fig = reframe ~margin:margin fig in
 	let fig = crop_width (float_of_int(w) -. 2.*.x0) fig in*)
@@ -220,13 +218,13 @@ let write_svg out fig =
 	Svg.put out (Svg.header w h);
 
 	put_lines out fig;
-	put_points out fig;
+	put_points out fig collec.Genotypes.genos;
 
 	Svg.close out
 	
-let write_svg_file fig file =
+let write_svg_file collec fig file =
 	let out = IO.output_channel (open_out file) in
-	write_svg out fig
+	write_svg collec fig out
 
 
 (*let test =

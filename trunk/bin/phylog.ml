@@ -19,5 +19,5 @@ let () =
 		let tree = Tree.prim_complete collec dmat in
 		let fig = Phylogram.radial_layout ~reframe:true 800. tree in
 
-		Phylogram.write_svg_file fig svg_file
+		Phylogram.write_svg_file collec fig svg_file
 
