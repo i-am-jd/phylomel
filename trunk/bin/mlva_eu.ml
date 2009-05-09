@@ -142,7 +142,7 @@ let () =
 		  let x0, y0 = (10.,10.) in
 		  unsafe_reframe (10.,10.) fig.ps;
 		  unsafe_crop_width (800.-.2.*.x0) fig.ps;
-		  fig.h <- height fig.ps;
+		  fig.h <- height fig.ps +. 2. *. y0;
 
 	      (*let links = get_links args coll in*)
 	      let name = sprintf "%smst-%s" args.dir args.id_session in
