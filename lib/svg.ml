@@ -83,8 +83,8 @@ let text out ?(id="") s ?(font="Arial") ?(size=10) ?(anchor="left") (x,y) =
 	"<text id=\"%s\" x=\"%.f\" y=\"%.f\" style=\"font-family: %s; font-size:%dpx; text-anchor: %s\"> %s </text>\n"
 	id x y font size anchor s)
 				
-let link out ?(id="") s ?(font="Arial") ?(size=10) ?(target="") ~link (x,y) =
+let link out ?(id="") s ?(font="Arial") ?(size=10) ?(anchor="left") ?(target="") ~link (x,y) =
 	put out
     (sprintf
-	"<a xlink:href=\"%s\" target=\"%s\"> <text id=\"%s\" x=\"%.2f\" y=\"%.2f\" style=\"font-family:%s;font-size:%dpx\"> %s </text> </a>\n"
-	link target id x y font size s)
+	"<a xlink:href=\"%s\" target=\"%s\"> <text id=\"%s\" x=\"%.2f\" y=\"%.2f\" style=\"font-family:%s;font-size:%dpx; text-anchor: %s\"> %s </text> </a>\n"
+	link target id x y font size anchor s)

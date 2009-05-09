@@ -166,20 +166,39 @@ let crop w' h' xs =
 		crop_height h' xs
 *)
 
-let put_points out fig genos =
+let put_points out ?(links_info = None) fig genos =
 	let printPoint i {x=x; y=y} =
-		Svg.put out
+
+		match links_info with
+			| None ->
+				  Svg.text out
+					  ~anchor:"middle"
+					  (Genotype.description genos.(i))
+					  (x, y+.4.);
+			| Some(links,target) ->
+				  let link = links.(i) in
+				  Svg.link out
+					  ~anchor:"middle"
+					  ~link:link
+					  ~target:target
+					  (Genotype.description genos.(i))
+					  (x, y+.4.)
+
+		(*Svg.put out
 			"<a xlink:href=\"http://www.w3schools.com\" target=\"\">";
-		Svg.circle out
+		*)
+		(*Svg.circle out
 			~fill:"lightsteelblue"
 			~stroke:"midnightblue"
 			~width:1.
-			4. (x, y);
-		Svg.text out
+			4. (x, y);*)
+		(* Svg.put out "</a>\n"; *)
+
+		(*Svg.text out
 			~anchor:"middle"
 			(Genotype.description genos.(i))
-			(x, y+.4.);
-		Svg.put out "</a>\n";
+			(x, y+.4.);*)
+
 	in Array.iteri printPoint fig.ps
 
 let put_lines out fig =
@@ -211,7 +230,7 @@ let put_lines out fig =
 
 	Array.iteri print_line ps
 
-let write_svg collec fig out =
+let write_svg ?(links_info = None) collec fig out =
 	(*let x0, y0 = margin in
 	let fig = reframe ~margin:margin fig in
 	let fig = crop_width (float_of_int(w) -. 2.*.x0) fig in*)
@@ -221,7 +240,7 @@ let write_svg collec fig out =
 	Svg.put out (Svg.header w h);
 
 	put_lines out fig;
-	put_points out fig collec.Genotypes.genos;
+	put_points out ~links_info:links_info fig collec.Genotypes.genos;
 
 	Svg.close out
 	

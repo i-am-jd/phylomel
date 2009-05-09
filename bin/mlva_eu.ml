@@ -144,7 +144,7 @@ let () =
 		  unsafe_crop_width (800.-.2.*.x0) fig.ps;
 		  fig.h <- height fig.ps +. 2. *. y0;
 
-	      (*let links = get_links args coll in*)
+	      let links = get_links args coll in
 	      let name = sprintf "%smst-%s" args.dir args.id_session in
 	      let svg_file = name ^ ".svg" in
 
