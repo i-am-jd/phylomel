@@ -77,14 +77,14 @@ let circle out ?(id="") ?(fill="none") ?(stroke="black") ?(width=1.) r (x,y) =
 	"<circle id=\"%s\" cx=\"%f\" cy=\"%f\" r=\"%f\" fill=\"%s\" stroke=\"%s\" stroke-width=\"%f\" />\n" 
 	id x y r fill stroke width)
 
-let text out ?(id="") s ?(font="Arial") ?(size=10) ?(anchor="left") (x,y) =
+let text out ?(id="") s ?(font="Arial") ?(size=10) ?(weight="normal") ?(anchor="left") (x,y) =
 	put out
     (sprintf
-	"<text id=\"%s\" x=\"%.f\" y=\"%.f\" style=\"font-family: %s; font-size:%dpx; text-anchor: %s\"> %s </text>\n"
-	id x y font size anchor s)
+	"<text id=\"%s\" x=\"%.f\" y=\"%.f\" style=\"font-family: %s; font-size:%dpx; font-weight: %s; text-anchor: %s\"> %s </text>\n"
+	id x y font size weight anchor s)
 				
-let link out ?(id="") s ?(font="Arial") ?(size=10) ?(anchor="left") ?(target="") ~link (x,y) =
+let link out ?(id="") s ?(font="Arial") ?(size=10) ?(weight="normal") ?(anchor="left") ?(target="") ~link (x,y) =
 	put out
     (sprintf
-	"<a xlink:href=\"%s\" target=\"%s\"> <text id=\"%s\" x=\"%.2f\" y=\"%.2f\" style=\"font-family:%s;font-size:%dpx; text-anchor: %s\"> %s </text> </a>\n"
-	link target id x y font size anchor s)
+	"<a xlink:href=\"%s\" target=\"%s\"> <text id=\"%s\" x=\"%.2f\" y=\"%.2f\" style=\"font-family:%s;font-size:%dpx; font-weight: %s; text-anchor: %s\"> %s </text> </a>\n"
+	link target id x y font size weight anchor s)
